@@ -3,7 +3,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 app=FastAPI()
 
-from controllers.useimage import router as image_router
+# from controllers.useimage import router as image_router #
 
 
 
