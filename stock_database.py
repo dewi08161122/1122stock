@@ -18,15 +18,9 @@ try:
             "id BIGINT unsigned NOT NULL primary key auto_increment," \
             "number VARCHAR(255) NOT NULL," \
             "name VARCHAR(255) NOT NULL," \
-            "category VARCHAR(255) NOT NULL," \
+            "category_number VARCHAR(255) NOT NULL," \
             "market_type VARCHAR(255) NOT NULL)"
             )
-            # cursor.execute("CREATE TABLE IF NOT EXISTS stock_prices(" \
-			# "id BIGINT unsigned not null primary key auto_increment," \
-			# "number VARCHAR(255) not null," \
-			# "name VARCHAR(255) not null," \
-			# "category VARCHAR(255) not null)"
-			# )
 
             for i in TWdata:
                 number = i.get("公司代號")
