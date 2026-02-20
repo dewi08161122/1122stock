@@ -23,4 +23,6 @@ with get_connection() as con:
                 category=i.split('.')
                 number = category[0]
                 name = category[1]
-                cursor.execute("INSERT INTO stock_category(category_number, category_name) VALUES(%s, %s,)",(number, name))
+                cursor.execute("INSERT INTO stock_category(category_number, category_name) VALUES(%s, %s)",[number, name])
+        cursor.execute("INSERT INTO stock_category(category_number, category_name) VALUES(%s, %s)",["91", "存託憑證"])
+        con.commit()

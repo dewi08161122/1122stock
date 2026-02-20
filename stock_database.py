@@ -1,7 +1,13 @@
 from infrastructure.connection import get_connection
-import json, requests
-from bs4 import BeautifulSoup
+import json, requests, pandas
 
+url = "https://isin.twse.com.tw/isin/class_i.jsp?kind=1"
+response = requests.get(url, verify=False)
+
+data = pandas.read_html(response.content, encoding='utf-8')
+
+list=data[0].iloc[5, 1]
+items = list.split(' ')
 try:
     with open("data/TW_company_data.json", "r", encoding="utf-8") as file:
         TWdata=json.load(file)
@@ -14,12 +20,43 @@ try:
     
     with get_connection() as con:
         with con.cursor() as cursor:
+            cursor.execute("CREATE TABLE IF NOT EXISTS stock_category(" \
+            "id BIGINT unsigned not null primary key auto_increment," \
+            "category_number varchar(255) not null," \
+            "category_name varchar(255) not null," \
+            "UNIQUE KEY (category_number));"
+			)
+            for i in items:
+                if '.' in i:
+                    category=i.split('.')
+                    number = category[0]
+                    name = category[1]
+                    cursor.execute("INSERT INTO stock_category(category_number, category_name) VALUES(%s, %s)",[number, name])
+            cursor.execute("INSERT INTO stock_category(category_number, category_name) VALUES(%s, %s)",["91", "存託憑證"])
+
             cursor.execute("CREATE TABLE IF NOT EXISTS stock_name(" \
             "id BIGINT unsigned NOT NULL primary key auto_increment," \
-            "number VARCHAR(255) NOT NULL," \
-            "name VARCHAR(255) NOT NULL," \
-            "category_number VARCHAR(255) NOT NULL," \
-            "market_type VARCHAR(255) NOT NULL)"
+            "number VARCHAR(20) NOT NULL," \
+            "name VARCHAR(100) NOT NULL," \
+            "category_number VARCHAR(100) NOT NULL," \
+            "market_type VARCHAR(20) NOT NULL," \
+            "FOREIGN KEY (category_number) REFERENCES stock_category (category_number) ON UPDATE CASCADE," \
+            "UNIQUE KEY (number)," \
+            "INDEX (name))"
+            )
+
+            cursor.execute("CREATE TABLE IF NOT EXISTS stock_prices(" \
+            "id BIGINT unsigned NOT NULL primary key auto_increment," \
+            "number VARCHAR(20) NOT NULL," \
+            "trade_date DATE NOT NULL," \
+            "open DECIMAL(10, 2)," \
+            "close DECIMAL(10, 2)," \
+            "high DECIMAL(10, 2)," \
+            "low DECIMAL(10, 2)," \
+            "volume BIGINT," \
+            "FOREIGN KEY (number) REFERENCES stock_name (number) ON UPDATE CASCADE," \
+            "UNIQUE KEY (number, trade_date)," \
+            "INDEX (trade_date))"
             )
 
             for i in TWdata:
@@ -29,7 +66,7 @@ try:
                 
                 if number and name and category:
                     cursor.execute(
-                        "INSERT INTO stock_name(number, name, category, market_type) VALUES(%s, %s, %s, %s)",
+                        "INSERT INTO stock_name(number, name, category_number, market_type) VALUES(%s, %s, %s, %s)",
                         (number, name, category, "上市")
                     )
                 else:
@@ -42,7 +79,7 @@ try:
                 
                 if number and name and category:
                     cursor.execute(
-                        "INSERT INTO stock_name(number, name, category, market_type) VALUES(%s, %s, %s, %s)",
+                        "INSERT INTO stock_name(number, name, category_number, market_type) VALUES(%s, %s, %s, %s)",
                         (number, name, category,"上櫃")
                     )
                 else:
@@ -51,4 +88,3 @@ try:
 
 except Exception as e:
     print(f"初始化資料庫失敗: {e}")
-
