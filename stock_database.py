@@ -1,22 +1,18 @@
 from infrastructure.connection import get_connection
 import json, requests, pandas
 
-url = "https://isin.twse.com.tw/isin/class_i.jsp?kind=1"
-response = requests.get(url, verify=False)
+category_url = "https://isin.twse.com.tw/isin/class_i.jsp?kind=1"
 
-data = pandas.read_html(response.content, encoding='utf-8')
-
-list=data[0].iloc[5, 1]
-items = list.split(' ')
 try:
     with open("data/TW_company_data.json", "r", encoding="utf-8") as file:
         TWdata=json.load(file)
     with open("data/TWO_company_data.json", "r", encoding="utf-8") as file:
         TWOdata=json.load(file)
-    url = "https://isin.twse.com.tw/isin/class_i.jsp?kind=1"
-    headers = {
-        "User-Agent": "Mozilla/5.0"
-    }
+
+    response = requests.get(category_url, verify=False)
+    data = pandas.read_html(response.content, encoding='utf-8')
+    list=data[0].iloc[5, 1]
+    items = list.split(' ')
     
     with get_connection() as con:
         with con.cursor() as cursor:
@@ -45,20 +41,6 @@ try:
             "INDEX (name))"
             )
 
-            cursor.execute("CREATE TABLE IF NOT EXISTS stock_prices(" \
-            "id BIGINT unsigned NOT NULL primary key auto_increment," \
-            "number VARCHAR(20) NOT NULL," \
-            "trade_date DATE NOT NULL," \
-            "open DECIMAL(10, 2)," \
-            "close DECIMAL(10, 2)," \
-            "high DECIMAL(10, 2)," \
-            "low DECIMAL(10, 2)," \
-            "volume BIGINT," \
-            "FOREIGN KEY (number) REFERENCES stock_name (number) ON UPDATE CASCADE," \
-            "UNIQUE KEY (number, trade_date)," \
-            "INDEX (trade_date))"
-            )
-
             for i in TWdata:
                 number = i.get("公司代號")
                 name = i.get("公司簡稱")
@@ -84,6 +66,31 @@ try:
                     )
                 else:
                     print(f"不完整的資料: {i}")
+            cursor.execute("CREATE TABLE IF NOT EXISTS stock_prices(" \
+            "id BIGINT unsigned NOT NULL primary key auto_increment," \
+            "number VARCHAR(20) NOT NULL," \
+            "trade_date DATE NOT NULL," \
+            "open DECIMAL(10, 2)," \
+            "close DECIMAL(10, 2)," \
+            "high DECIMAL(10, 2)," \
+            "low DECIMAL(10, 2)," \
+            "change_price VARCHAR(100)," \
+            "volume BIGINT," \
+            "FOREIGN KEY (number) REFERENCES stock_name (number) ON UPDATE CASCADE," \
+            "UNIQUE KEY (number, trade_date)," \
+            "INDEX (trade_date))"
+            )
+            cursor.execute("CREATE TABLE IF NOT EXISTS TAIEX_prices(" \
+            "id BIGINT unsigned NOT NULL primary key auto_increment," \
+            "trade_date DATE NOT NULL," \
+            "open DECIMAL(10, 2)," \
+            "close DECIMAL(10, 2)," \
+            "high DECIMAL(10, 2)," \
+            "low DECIMAL(10, 2)," \
+            "change_price VARCHAR(100)," \
+            "volume BIGINT," \
+            "UNIQUE KEY (trade_date))"
+            )
             con.commit()
 
 except Exception as e:
