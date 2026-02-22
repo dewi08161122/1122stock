@@ -1,3 +1,4 @@
+from models.save_stock_model import StockModel
 from infrastructure.connection import get_connection
 import json, requests, pandas
 
@@ -27,8 +28,8 @@ try:
                     category=i.split('.')
                     number = category[0]
                     name = category[1]
-                    cursor.execute("INSERT INTO stock_category(category_number, category_name) VALUES(%s, %s)",[number, name])
-            cursor.execute("INSERT INTO stock_category(category_number, category_name) VALUES(%s, %s)",["91", "存託憑證"])
+                    StockModel.save_stock_category(cursor, number, name)
+            StockModel.save_stock_category(cursor, "91", "存託憑證")
 
             cursor.execute("CREATE TABLE IF NOT EXISTS stock_name(" \
             "id BIGINT unsigned NOT NULL primary key auto_increment," \
@@ -47,10 +48,7 @@ try:
                 category = i.get("產業別")
                 
                 if number and name and category:
-                    cursor.execute(
-                        "INSERT INTO stock_name(number, name, category_number, market_type) VALUES(%s, %s, %s, %s)",
-                        (number, name, category, "上市")
-                    )
+                    StockModel.save_stock_name(cursor, number, name, category, "上市")
                 else:
                     print(f"不完整的資料: {i}")
 
@@ -60,22 +58,20 @@ try:
                 category = i.get("SecuritiesIndustryCode")
                 
                 if number and name and category:
-                    cursor.execute(
-                        "INSERT INTO stock_name(number, name, category_number, market_type) VALUES(%s, %s, %s, %s)",
-                        (number, name, category,"上櫃")
-                    )
+                    StockModel.save_stock_name(cursor, number, name, category, "上櫃")
                 else:
                     print(f"不完整的資料: {i}")
             cursor.execute("CREATE TABLE IF NOT EXISTS stock_prices(" \
             "id BIGINT unsigned NOT NULL primary key auto_increment," \
             "number VARCHAR(20) NOT NULL," \
             "trade_date DATE NOT NULL," \
-            "open DECIMAL(10, 2)," \
-            "close DECIMAL(10, 2)," \
-            "high DECIMAL(10, 2)," \
-            "low DECIMAL(10, 2)," \
-            "change_price VARCHAR(100)," \
-            "volume BIGINT," \
+            "open_price DECIMAL(10, 2)," \
+            "close_price DECIMAL(10, 2)," \
+            "high_price DECIMAL(10, 2)," \
+            "low_price DECIMAL(10, 2)," \
+            "change_price DECIMAL(10, 2)," \
+            "trade_volume BIGINT," \
+            "trade_value BIGINT," \
             "FOREIGN KEY (number) REFERENCES stock_name (number) ON UPDATE CASCADE," \
             "UNIQUE KEY (number, trade_date)," \
             "INDEX (trade_date))"
@@ -83,12 +79,23 @@ try:
             cursor.execute("CREATE TABLE IF NOT EXISTS TAIEX_prices(" \
             "id BIGINT unsigned NOT NULL primary key auto_increment," \
             "trade_date DATE NOT NULL," \
-            "open DECIMAL(10, 2)," \
-            "close DECIMAL(10, 2)," \
-            "high DECIMAL(10, 2)," \
-            "low DECIMAL(10, 2)," \
-            "change_price VARCHAR(100)," \
-            "volume BIGINT," \
+            "open_price DECIMAL(10, 2)," \
+            "close_price DECIMAL(10, 2)," \
+            "high_price DECIMAL(10, 2)," \
+            "low_price DECIMAL(10, 2)," \
+            "change_price DECIMAL(10, 2)," \
+            "trade_value BIGINT," \
+            "UNIQUE KEY (trade_date))"
+            )
+            cursor.execute("CREATE TABLE IF NOT EXISTS TPEX_prices(" \
+            "id BIGINT unsigned NOT NULL primary key auto_increment," \
+            "trade_date DATE NOT NULL," \
+            "open_price DECIMAL(10, 2)," \
+            "close_price DECIMAL(10, 2)," \
+            "high_price DECIMAL(10, 2)," \
+            "low_price DECIMAL(10, 2)," \
+            "change_price DECIMAL(10, 2)," \
+            "trade_value BIGINT," \
             "UNIQUE KEY (trade_date))"
             )
             con.commit()
