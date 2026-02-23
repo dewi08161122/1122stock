@@ -1,4 +1,4 @@
-from models.save_stock_model import StockModel
+from models.stock_model import StockModel
 from infrastructure.connection import get_connection
 import json, requests, pandas
 
