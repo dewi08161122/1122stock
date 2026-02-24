@@ -1,6 +1,4 @@
 from utils.data_utils import FormatHelper
-import requests
-
 
 class TwseStock:
     @staticmethod
@@ -10,20 +8,7 @@ class TwseStock:
         return url
     
     @staticmethod
-    def get_TWstock_json(TWstock_url):
-        headers = {
-            "User-Agent": "Mozilla/5.0",
-            "Referer": "https://www.twse.com.tw/"
-        }
-        response = requests.get(TWstock_url, headers=headers, verify=False)
-        if response.status_code != 200:
-            print("請求失敗")
-            return None
-        data = response.json()
-        return data
-    
-    @staticmethod
-    def clean_jsondata(jsondata, number_data, start_date):
+    def clean_stock_data(jsondata, number_data, start_date):
         stock_data = None
         for table in jsondata.get("tables", []):
             if "每日收盤行情" in table.get('title', ''):
