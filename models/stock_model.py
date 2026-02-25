@@ -34,6 +34,28 @@ class StockModel:
         except Exception as e:
             print(f"批次儲存失敗: {e}")
     @staticmethod
+    def save_TPEX_prices(TPEX_prices_list):
+        try:
+            with get_connection() as con:
+                with con.cursor() as cursor:
+                    cursor.executemany(
+                        "INSERT IGNORE INTO TPEX_prices(trade_date, open_price, close_price, high_price, low_price, change_price, trade_value) VALUES(%s, %s, %s, %s, %s, %s, %s)",TPEX_prices_list
+                    )
+                    con.commit()
+        except Exception as e:
+            print(f"批次儲存失敗: {e}")
+    @staticmethod
+    def save_TPEX_value(value, date):
+        try:
+            with get_connection() as con:
+                with con.cursor() as cursor:
+                    cursor.execute(
+                        "UPDATE TPEX_prices SET trade_value = %s WHERE trade_date = %s",(value, date)
+                    )
+                    con.commit()
+        except Exception as e:
+            print(f"批次儲存失敗: {e}")
+    @staticmethod
     def get_all_stock_numbers():
         try:
             with get_connection() as con:

@@ -8,7 +8,7 @@ class TwseStock:
         return url
     
     @staticmethod
-    def clean_stock_data(jsondata, number_data, start_date):
+    def clean_TWstock_data(jsondata, number_data, start_date):
         stock_data = None
         for table in jsondata.get("tables", []):
             if "每日收盤行情" in table.get('title', ''):

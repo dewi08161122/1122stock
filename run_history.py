@@ -1,6 +1,7 @@
 from services.twse_stock_service import TwseStock
 from services.twse_index_service import TwseIndex
 from services.tpex_stock_service import TpexStock
+from services.tpex_index_service import TpexIndex
 from models.stock_model import StockModel
 from infrastructure.network import get_json_by_url
 import time, random
@@ -46,20 +47,25 @@ def get_TwseIndex_data(start_date, end_date):  # 資料進度 2020, 1, 1
         sleep_time = random.uniform(12, 20) 
         time.sleep(sleep_time)
 
-# start = date(2021, 1, 1)
-# end = date(2020, 1, 1)
+# start = date(2026, 2, 1)
+# end = date(2026, 2, 1)
 # get_TwseIndex_data(start, end) # 上市大盤進度
 
-def get_TpexStock_data(start_date, end_date):  # 資料進度 2026, 1, 1
+def get_TpexStock_data(start_date, end_date):  # 資料進度 2024, 1, 1
     number_data = set(StockModel.get_all_stock_numbers())
     while start_date >= end_date:
         if start_date.weekday() >= 5:
             start_date -= timedelta(days=1)
             continue
-        jsondata=TpexStock.get_tpex_data(start_date)
+        jsondata=TpexStock.get_Tpexstock_data(start_date)
         stock_data=TpexStock.clean_Tpexstock_data(jsondata, number_data, start_date)
-        if stock_data:          
+        date_str = start_date.strftime("%Y-%m-%d")
+        Tpex_value=TpexIndex.clean_TpexIndex_valuedata(jsondata)
+        if stock_data :          
             StockModel.save_stock_prices(stock_data)
+        if Tpex_value:
+            StockModel.save_TPEX_value(Tpex_value, date_str)
+        if stock_data or Tpex_value:
             print(f"[{start_date}] 儲存完成。")
         else:
             print(f"[{start_date}] 無資料 (可能是休市)。")
@@ -68,6 +74,24 @@ def get_TpexStock_data(start_date, end_date):  # 資料進度 2026, 1, 1
         sleep_time = random.uniform(5, 12) 
         time.sleep(sleep_time)
 
-# start = date(2026, 2, 24)
-# end = date(2026, 2, 4)
-# get_TpexStock_data(start, end) # 上櫃個股進度
+start = date(2026, 1, 1)
+end = date(2025, 7, 1)
+get_TpexStock_data(start, end) # 上櫃個股進度+上櫃指數成交金額
+
+def get_TpexIndex_data(start_date, end_date):  # 資料進度 2020, 1, 1
+    while start_date >= end_date:
+        jsondata=TpexIndex.get_TpexIndex_data(start_date)
+        TPEX_data=TpexIndex.clean_TpexIndex_data_without_value(jsondata)
+        if TPEX_data:
+            StockModel.save_TPEX_prices(TPEX_data)
+            print(f"[{start_date.strftime('%Y-%m')}] 儲存完成。")
+        else:
+            print(f"[{start_date.strftime('%Y-%m')}] 無資料或抓取異常。")
+
+        start_date = start_date.replace(day=1) - timedelta(days=1)
+        sleep_time = random.uniform(12, 20) 
+        time.sleep(sleep_time)
+
+# start = date(2021, 1, 1)
+# end = date(2020, 1, 1)
+# get_TpexIndex_data(start, end) # 上櫃指數進度-指數成交金額
