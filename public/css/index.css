@@ -9,59 +9,6 @@ body{
     background-attachment: fixed; 
     min-height: 100vh;
 }
-.navbar {
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;   
-    background-color: rgba(0, 0, 0, 0.5);    
-    padding: 10px 100px; 
-    height: 60px;
-    color: #ffffff;
-}
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 8px; 
-}
-.logo_img {
-    width: 50px;  
-    height: 40px;
-    border-radius: 6px; 
-}
-.logo_word {
-    font-size: 24px;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-.list {
-    display: flex;
-    list-style: none;   
-    padding: 0;
-    gap: 25px;         
-}
-.bar {
-    font-size: 18px;
-    font-weight: bold;
-    color: #ffffff;   
-    cursor: pointer;
-    transition: color 0.3s;  
-}
-.bar:hover {
-    color: #00ffff; 
-}
-.login_btn {
-    border: 1px solid #ffffff; 
-    padding: 6px 20px;
-    border-radius: 20px; 
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s;
-    background-color: transparent;
-}
-.login_btn:hover {
-    background-color: #ffffff;
-    color: #000000;
-}
 .hero_section {
     display: flex;
     justify-content: flex-start;

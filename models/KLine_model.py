@@ -32,7 +32,6 @@ class KLineModel:
                         i["low"]=float(i["low"])
                         i["close"]=float(i["close"])
                         i["value"]=int(i["value"])
-                    print(result)
                     return result
         except Exception as e:
             print(e)

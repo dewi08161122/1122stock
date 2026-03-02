@@ -3,7 +3,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 app=FastAPI()
 
-from controllers.get_KLine_controller import router as KLine_router
+from controllers.KLine_controller import router as KLine_router
 
 app.include_router(KLine_router)
 
@@ -13,7 +13,7 @@ async def index(request: Request):
 @app.get("/stockindex", include_in_schema=False)
 async def stockindex(request: Request):
 	return FileResponse("./static/stockindex.html", media_type="text/html")
-@app.get("/stockcategory/{id}", include_in_schema=False)
+@app.get("/stockcategory", include_in_schema=False)
 async def stockcategory(request: Request):
 	return FileResponse("./static/stockcategory.html", media_type="text/html")
 @app.get("/hotstock", include_in_schema=False)
@@ -26,7 +26,7 @@ async def watchlist(request: Request):
 async def selfstock(request: Request):
 	return FileResponse("./static/selfstock.html", media_type="text/html")
 @app.get("/stock/{number}", include_in_schema=False)
-async def stock(request: Request):
+async def stock(request: Request, number: str):
 	return FileResponse("./static/stock.html", media_type="text/html")
 
 app.mount("/css", StaticFiles(directory="public/css"), name="css")
