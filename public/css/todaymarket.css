@@ -1,0 +1,96 @@
+body{
+    background-color: #121212;
+    color: #d1d4dc;
+    margin:0px;
+    font-family: "Noto Sans TC";
+    font-style: normal;
+}
+.market {
+    display: flex;
+    justify-content: space-around;
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 12px;
+    gap: 20px;
+}
+
+.index {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 20px;
+}
+.index-content {
+    display: flex;
+    justify-content: space-between; /* 關鍵：推向兩端 */
+    align-items: center;           /* 垂直置中 */
+    margin-bottom: 15px;
+    width: 100%
+}
+
+.index-name {
+    font-size: 30px;
+    color: #999;
+    margin-bottom: 15px;
+    text-decoration: none;
+}
+.index-name:hover {
+    color: #00ffff; 
+}
+
+.index-price {
+    font-size: 40px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.index-trend {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.up { color: #ef5350; }   /* 紅色 */
+.down { color: #26a69a; } /* 綠色 */
+
+.mini-chart {
+  width: 36px;
+  height: 36px;
+  margin-right: 30px;
+  position: relative;
+}
+
+.market-info {
+    width: 100%;
+    border-top: 1px solid #333;
+    padding-top: 20px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    color: #bbb;
+    margin-bottom: 10px;
+}
+
+.info-row span { color: #fff; }
+.info-row .rise { color: #ef5350; }
+.info-row .fall { color: #26a69a; }
+.info-row .falt { color: #fbff00; }
+.time {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #999;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    border: 1px solid #333;
+    z-index: 1000;
+}

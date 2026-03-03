@@ -3,16 +3,20 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 app=FastAPI()
 
+from controllers.today_market_controller import router as todaymarket_router
 from controllers.KLine_controller import router as KLine_router
+from controllers.stockcategory_controller import router as stockcategory_router
 
 app.include_router(KLine_router)
+app.include_router(todaymarket_router)
+app.include_router(stockcategory_router)
 
 @app.get("/", include_in_schema=False)
 async def index(request: Request):
 	return FileResponse("./static/index.html", media_type="text/html")
-@app.get("/stockindex", include_in_schema=False)
+@app.get("/todaymarket", include_in_schema=False)
 async def stockindex(request: Request):
-	return FileResponse("./static/stockindex.html", media_type="text/html")
+	return FileResponse("./static/todaymarket.html", media_type="text/html")
 @app.get("/stockcategory", include_in_schema=False)
 async def stockcategory(request: Request):
 	return FileResponse("./static/stockcategory.html", media_type="text/html")

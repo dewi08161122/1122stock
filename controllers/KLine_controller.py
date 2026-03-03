@@ -7,7 +7,7 @@ router = APIRouter()
 def getStockKLine(number: str):
     try:
         if number == "TAIEX":
-            KLine = KLineModel.get_TAIEX_KLine()
+            KLine = KLineModel. get_TAIEX_KLine()
         elif number == "TPEX":
             KLine = KLineModel.get_TPEX_KLine()
         else:    

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>今日行情</title>
+  <link rel="stylesheet" type="text/css" href="/css/todaymarket.css" />
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+  <div class="market">
+    <div class="index">
+      <div class="index-content">
+        <div class="index-main">
+          <a href="/stock/TAIEX" class="index-name">加權指數</a>
+          <div class="index-price" id="taiex-price"></div>
+          <div class="index-trend" id="taiex-trend">
+            <span class="change-point"></span>
+            <span class="change-percent"></span>
+          </div>
+        </div>
+        <div class="mini-chart" id="taiex-chart"></div>
+      </div>
+      <div class="market-info">
+        <div class="info-row">成交金額：<span id="taiex-value"></span></div>
+        <div class="info-row">上漲家數：<span class="rise" id="taiex-rise"></span></div>
+        <div class="info-row">下跌家數：<span class="fall" id="taiex-fall"></span></div>
+        <div class="info-row">平盤家數：<span class="falt" id="taiex-flat"></span></div>
+      </div>
+    </div>
+
+    <div class="index">
+      <div class="index-content">
+        <div class="index-main">
+          <a href="/stock/TPEX" class="index-name">櫃買指數</a>
+          <div class="index-price" id="tpex-price"></div>
+          <div class="index-trend" id="tpex-trend">
+            <span class="change-point"></span>
+            <span class="change-percent"></span>
+          </div>
+        </div>
+        <div class="mini-chart" id="tpex-chart"></div>
+      </div>
+      <div class="market-info">
+        <div class="info-row">成交金額：<span id="tpex-value"></span></div>
+        <div class="info-row">上漲家數：<span class="rise" id="tpex-rise"></span></div>
+        <div class="info-row">下跌家數：<span class="fall" id="tpex-fall"></span></div>
+        <div class="info-row">平盤家數：<span class="falt" id="tpex-flat"></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="time"></div>
+  <script src="/js/navbar.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@5.1.0/dist/lightweight-charts.standalone.production.js"></script>
+  <script src="/js/todaymarket.js"></script>
+</body>
+</html>
