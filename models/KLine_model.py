@@ -52,3 +52,4 @@ class KLineModel:
                     return result
         except Exception as e:
             print(e)
+    
