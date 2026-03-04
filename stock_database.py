@@ -98,6 +98,19 @@ try:
             "trade_value BIGINT," \
             "UNIQUE KEY (trade_date))"
             )
+            cursor.execute("CREATE TABLE IF NOT EXISTS member(" \
+			"id BIGINT unsigned not null primary key auto_increment," \
+			"email varchar(255) not null," \
+			"password varchar(255) not null);"
+			)
+            cursor.execute("CREATE TABLE IF NOT EXISTS member_stock(" \
+            "id BIGINT unsigned NOT NULL primary key auto_increment," \
+            "user_id BIGINT unsigned not null," \
+            "number VARCHAR(20) NOT NULL," \
+            "user_type VARCHAR(20) NOT NULL," \
+            "FOREIGN KEY (user_id) REFERENCES member (id)," \
+            "FOREIGN KEY (number) REFERENCES stock_name (number) ON UPDATE CASCADE)"
+            )
             con.commit()
 
 except Exception as e:
