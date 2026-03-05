@@ -62,14 +62,12 @@ async function getNavbar() {
         let email=login_email.value
         let password=login_password.value
         if(email=="" || password==""){
-            login_word.textContent="請輸入信箱和密碼，點此註冊"
+            login_word.textContent="請輸入信箱和密碼或點此註冊"
             return;
         }
         let response=await fetch("/api/user/auth",{
             method:"PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: {"Content-Type": "application/json"},
             body:JSON.stringify({"email":email, "password":password})
         });
         let result=await response.json();
@@ -118,6 +116,8 @@ async function getNavbar() {
         }else {
         member_btn.textContent = "會員登入";
         }
+        console.log("login response status:", response.status);
+        console.log("login result:", result);
     }
     await check()
 }

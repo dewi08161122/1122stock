@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>市場焦點</title>
+  <link rel="stylesheet" type="text/css" href="/css/todaymarket.css" />
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+  <div class="market">
+    <div class="index-content">
+      <div class="index-main">
+        <a href="/stock/TAIEX" class="index-name">加權指數</a>
+        <div class="index-price" id="taiex-price"></div>
+        <div class="index-trend" id="taiex-trend">
+          <span class="change-point"></span>
+          <span class="change-percent"></span>
+        </div>
+      </div>
+      <div class="mini-chart" id="taiex-chart"></div>
+    </div>
+  </div>
+  <div class="time"></div>
+  <script src="/js/navbar.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@5.1.0/dist/lightweight-charts.standalone.production.js"></script>
+  <script src="/js/todaymarket.js"></script>
+</body>
+</html>
