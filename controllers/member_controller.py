@@ -60,3 +60,7 @@ def login(response: Response, body: dict=Body(...)):
     except Exception as e:
         print(e)
         return{"error":True,"message":"伺服器內部錯誤"}
+@router.delete("/api/user/auth")
+def logout(response: Response):
+    response.delete_cookie(key="token")
+    return {"ok": True}

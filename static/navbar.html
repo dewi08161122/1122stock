@@ -1,4 +1,5 @@
 <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+<div class="opacity"></div>
 <header class="navbar">
     <div class="logo">
         <img src="/img/logo.png" class="logo_img">
@@ -12,8 +13,32 @@
         <li><a href="/watchlist" class="bar">觀察名單</a></li>
         <li><a href="/selfstock" class="bar">持股名單</a></li>
     </ul>
-    <div class="user">
-        <div class="login_btn">會員登入</div>
+    <div class="member">
+        <div class="member_btn">會員登入</div>
     </div>
 </header>
+<div class="account" id="sign">
+    <img src="/img/logo.png" class="close" />
+    <div class="account-title">註冊會員帳號</div>
+    <div class="input-box">
+        <input class="email" id="sign-email" type="text" placeholder="輸入電子信箱"/>
+    </div>
+    <div class="input-box">
+        <input class="password" id="sign-password" type="password" placeholder="輸入密碼"/>
+    </div>
+    <div class="account-button" id="sign-button">註冊新帳戶</div>
+    <div class="account-word" id="sign-word">已經有帳戶了？點此登入</div>
+</div>
+<div class="account" id="login">
+    <img src="/img/logo.png" class="close" />
+    <div class="account-title">登入會員帳號</div>
+    <div class="input-box">
+        <input class="email" id="login-email" type="text" placeholder="輸入電子信箱"/>
+    </div>
+    <div class="input-box">
+        <input class="password" id="login-password" type="password" placeholder="輸入密碼"/>
+    </div>
+    <div class="account-button" id="login-button">登入帳戶</div>
+    <div class="account-word" id="login-word">還沒有帳戶？點此註冊</div>
+</div>
 <script src="/js/stock.js"></script>
