@@ -73,10 +73,22 @@ chart.priceScale("vol").applyOptions({
 
 async function KLineData() {
     const stockId = window.location.pathname.split('/').pop();
+    const nameSpan = document.querySelector('.stock-name');
     let response=await fetch(`/api/stock/${stockId}`,{
         method:"GET"
     });
     let data = await response.json();   
+    if (data && data.length > 0) {
+        if (stockId === "TAIEX") {
+            nameSpan.textContent = "加權指數 (TAIEX)";
+        } else if (stockId === "TPEX") {
+            nameSpan.textContent = "櫃買指數 (TPEX)";
+        } else {
+            const stockName = data[0].name || "";
+            const stockNumber = data[0].number || stockId;
+            nameSpan.textContent = `${stockNumber} ${stockName}`;
+        }
+    }
     candlestickSeries.setData(data);
     const ma5Data = calculateMA(data, 5);
     const ma10Data = calculateMA(data, 10);

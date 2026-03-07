@@ -31,7 +31,8 @@ body{
 
 .index-name {
     font-size: 30px;
-    color: #999;
+    color: #ffffff;
+    font-weight:bold;
     margin-bottom: 15px;
     text-decoration: none;
 }

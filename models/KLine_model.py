@@ -6,7 +6,7 @@ class KLineModel:
         try:
             with get_connection() as con:
                 with con.cursor(dictionary=True) as cursor:
-                    cursor.execute("SELECT trade_date as time, open_price as open, high_price as high, low_price as low, close_price as close, trade_volume as value FROM stock_prices WHERE number=%s ORDER BY trade_date ASC",[stockNumber])
+                    cursor.execute("SELECT trade_date as time, open_price as open, high_price as high, low_price as low, close_price as close, trade_volume as value, name, stock_prices.number as number FROM stock_prices JOIN stock_name ON stock_prices.number = stock_name.number WHERE stock_prices.number=%s ORDER BY trade_date ASC",[stockNumber])
                     result = cursor.fetchall()
                     for i in result:
                         i["time"]=str(i["time"])

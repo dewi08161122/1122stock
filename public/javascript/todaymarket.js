@@ -23,12 +23,14 @@ function renderMarketData(prefix, info, market) {
     const trendEl = document.getElementById(`${prefix}-trend`);
     trendEl.querySelector('.change-point').innerText = fmt(Math.abs(info.change_price));
     trendEl.querySelector('.change-percent').innerText = `${fmt(Math.abs(info.percent))}%`;
-
+    const priceEl = document.getElementById(`${prefix}-price`);
     // 處理顏色與符號
     trendEl.classList.remove('up', 'down');
     let symbol = info.change_price > 0 ? "▲ " : (info.change_price < 0 ? "▼ " : "─ ");
     if (info.change_price > 0) trendEl.classList.add('up');
     if (info.change_price < 0) trendEl.classList.add('down');
+    if (info.change_price > 0) priceEl.classList.add('up');
+    if (info.change_price < 0) priceEl.classList.add('down');
     
     // 更新符號 (假設你在 trend 內部的最前面手動加一個文字或 span)
     trendEl.firstChild.textContent = symbol;
