@@ -22,12 +22,20 @@ class SearchModel:
         except Exception as e:
             print(e)
     @staticmethod
-    def get_trade_value_ranking(category_name: str):
+    def get_trade_value_ranking(trade_date: str):
         try:
             with get_connection() as con:
                 with con.cursor(dictionary=True) as cursor:
-                    cursor.execute("SELECT trade_date as time, open_price as open, high_price as high, low_price as low, close_price as close, change_price as change_price,(change_price / (close_price - change_price) * 100) as percent FROM stock_price JOIN stock_name ON stock_price.number = stock_name.number WHERE trade_date = %s ORDER BY trade_value DESC LIMIT 30",[category_name])
+                    cursor.execute("SELECT  trade_date as time,open_price as open, high_price as high, low_price as low, close_price as close, change_price as change_price,(change_price / (close_price - change_price) * 100) as percent, stock_prices.number, name FROM stock_prices JOIN stock_name ON stock_prices.number = stock_name.number WHERE trade_date = %s ORDER BY trade_value DESC LIMIT 30",[trade_date])
                     result = cursor.fetchall()
+                    for i in result:
+                        i["time"]=str(i["time"])
+                        i["open"]=float(i["open"])
+                        i["high"]=float(i["high"])
+                        i["low"]=float(i["low"])
+                        i["close"]=float(i["close"])
+                        i["change_price"]=float(i["change_price"])
+                        i["percent"]=float(i["percent"])
                     return result
         except Exception as e:
             print(e)

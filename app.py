@@ -6,11 +6,13 @@ app=FastAPI()
 from controllers.today_market_controller import router as todaymarket_router
 from controllers.KLine_controller import router as KLine_router
 from controllers.stockcategory_controller import router as stockcategory_router
+from controllers.hotstock_controller import router as hotstock_router
 from controllers.member_controller import router as member_router
 
 app.include_router(KLine_router)
 app.include_router(todaymarket_router)
 app.include_router(stockcategory_router)
+app.include_router(hotstock_router)
 app.include_router(member_router)
 
 @app.get("/", include_in_schema=False)
