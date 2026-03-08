@@ -26,3 +26,13 @@ def getcategorystock(category_name: str = Query(None)):
     except Exception as e:
         print(e)
         return{"error":True,"message":"伺服器內部錯誤"}
+@router.get("/api/searchstock")
+def searchstock(keyword: str = Query(None)):
+    try:
+        stock = SearchModel.search_stock(keyword)
+        if stock is None: 
+            return {"error": True, "message": "查無相似資料"}
+        return stock
+    except Exception as e:
+        print(e)
+        return{"error":True,"message":"伺服器內部錯誤"}

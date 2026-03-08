@@ -5,6 +5,9 @@ body{
     font-family: "Noto Sans TC";
     font-style: normal;
 }
+* {
+    box-sizing: border-box;
+}
 .search-container {
     max-width: 1200px;
     margin: 20px auto;
@@ -12,15 +15,16 @@ body{
     text-align: center;
 }
 .search-box {
-    display: flex;
-    justify-content: center;
+    position: relative;
+    width: 400px; 
+    margin: 0 auto;
 }
 .stock-search {
-    width: 100%;
-    max-width: 400px;
-    background-color: #1e1e1e; 
+    width: 100%; 
+    max-width: 100%; 
+    background-color: #1e1e1e;
     border: 1px solid #333;
-    border-radius: 4px; 
+    border-radius: 4px;
     color: #ffffff;
     padding: 10px 15px;
     font-size: 16px;
@@ -101,4 +105,31 @@ body{
     background-color: #3d3d3d;
     border-color: #666;
     transform: translateY(-2px);
+}
+.search-suggestions {
+    position: absolute;
+    top: 100%;  
+    left: 0;
+    right: 0;
+    width: 100%;    
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-top: none;
+    z-index: 1000;
+    overflow-y: auto;
+    border-radius: 0 0 4px 4px; 
+    box-sizing: border-box;  
+}
+
+.suggestion-item {
+    padding: 12px 15px;
+    cursor: pointer;
+    color: #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.suggestion-item:hover {
+    background-color: #3d3d3d;
+    color: #00ffff;
 }

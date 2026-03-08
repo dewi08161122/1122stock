@@ -26,8 +26,8 @@ def get_TwseStock_data(start_date, end_date):  # 資料進度 2019, 1, 1
         sleep_time = random.uniform(5, 12) 
         time.sleep(sleep_time)
 
-# start = date(2019, 7, 1)
-# end = date(2019, 1, 1)
+start = date(2026, 3, 6)
+end = date(2026, 3, 2)
 # get_TwseStock_data(start, end) # 上市個股進度
 
 def get_TwseIndex_data(start_date, end_date):  # 資料進度 2018, 1, 1
@@ -76,7 +76,7 @@ def get_TpexStock_data(start_date, end_date):  # 資料進度 2019, 1, 1
 
 # start = date(2020, 1, 1)
 # end = date(2019, 1, 1)
-# get_TpexStock_data(start, end) # 上櫃個股進度+上櫃指數成交金額
+get_TpexStock_data(start, end) # 上櫃個股進度+上櫃指數成交金額
 
 def get_TpexIndex_data(start_date, end_date):  # 資料進度 2019, 1, 1
     while start_date >= end_date:

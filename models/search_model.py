@@ -22,6 +22,18 @@ class SearchModel:
         except Exception as e:
             print(e)
     @staticmethod
+    def search_stock(keyword: str):
+        try:
+            search_param = f"%{keyword}%"
+            with get_connection() as con:
+                with con.cursor(dictionary=True) as cursor:
+                    cursor.execute("SELECT number, name FROM stock_name WHERE number LIKE %s OR name LIKE %s LIMIT 10",[search_param,search_param])
+                    result = cursor.fetchall()
+                    return result
+        except Exception as e:
+            print(e)
+            return []
+    @staticmethod
     def get_trade_value_ranking(trade_date: str):
         try:
             with get_connection() as con:
