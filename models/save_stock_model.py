@@ -16,9 +16,21 @@ class StockModel:
         try:
             with get_connection() as con:
                 with con.cursor() as cursor:
-                    cursor.executemany(
-                        "INSERT IGNORE INTO stock_prices(number, trade_date, open_price, close_price, high_price, low_price, change_price, trade_volume, trade_value) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)",stock_prices_list
-                    )
+                    sql = """
+                        INSERT INTO stock_prices (
+                            number, trade_date, open_price, close_price, 
+                            high_price, low_price, change_price, trade_volume, trade_value
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        ON DUPLICATE KEY UPDATE
+                            open_price = VALUES(open_price),
+                            close_price = VALUES(close_price),
+                            high_price = VALUES(high_price),
+                            low_price = VALUES(low_price),
+                            change_price = VALUES(change_price),
+                            trade_volume = VALUES(trade_volume),
+                            trade_value = VALUES(trade_value)
+                    """
+                    cursor.executemany(sql, stock_prices_list)
                     con.commit()
         except Exception as e:
             print(f"批次儲存失敗: {e}")
@@ -27,9 +39,20 @@ class StockModel:
         try:
             with get_connection() as con:
                 with con.cursor() as cursor:
-                    cursor.executemany(
-                        "INSERT IGNORE INTO TAIEX_prices(trade_date, open_price, close_price, high_price, low_price, change_price, trade_value) VALUES(%s, %s, %s, %s, %s, %s, %s)",TAIEX_prices_list
-                    )
+                    sql = """
+                        INSERT INTO TAIEX_prices (
+                            trade_date, open_price, close_price, 
+                            high_price, low_price, change_price, trade_value
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+                        ON DUPLICATE KEY UPDATE
+                            open_price = VALUES(open_price),
+                            close_price = VALUES(close_price),
+                            high_price = VALUES(high_price),
+                            low_price = VALUES(low_price),
+                            change_price = VALUES(change_price),
+                            trade_value = VALUES(trade_value)
+                    """
+                    cursor.executemany(sql, TAIEX_prices_list)
                     con.commit()
         except Exception as e:
             print(f"批次儲存失敗: {e}")
@@ -38,9 +61,20 @@ class StockModel:
         try:
             with get_connection() as con:
                 with con.cursor() as cursor:
-                    cursor.executemany(
-                        "INSERT IGNORE INTO TPEX_prices(trade_date, open_price, close_price, high_price, low_price, change_price, trade_value) VALUES(%s, %s, %s, %s, %s, %s, %s)",TPEX_prices_list
-                    )
+                    sql = """
+                        INSERT INTO TPEX_prices (
+                            trade_date, open_price, close_price, 
+                            high_price, low_price, change_price, trade_value
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+                        ON DUPLICATE KEY UPDATE
+                            open_price = VALUES(open_price),
+                            close_price = VALUES(close_price),
+                            high_price = VALUES(high_price),
+                            low_price = VALUES(low_price),
+                            change_price = VALUES(change_price),
+                            trade_value = VALUES(trade_value)
+                    """
+                    cursor.executemany(sql, TPEX_prices_list)
                     con.commit()
         except Exception as e:
             print(f"批次儲存失敗: {e}")
