@@ -64,15 +64,14 @@ class StockModel:
                     sql = """
                         INSERT INTO TPEX_prices (
                             trade_date, open_price, close_price, 
-                            high_price, low_price, change_price, trade_value
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+                            high_price, low_price, change_price
+                        ) VALUES (%s, %s, %s, %s, %s, %s)
                         ON DUPLICATE KEY UPDATE
                             open_price = VALUES(open_price),
                             close_price = VALUES(close_price),
                             high_price = VALUES(high_price),
                             low_price = VALUES(low_price),
-                            change_price = VALUES(change_price),
-                            trade_value = VALUES(trade_value)
+                            change_price = VALUES(change_price)
                     """
                     cursor.executemany(sql, TPEX_prices_list)
                     con.commit()

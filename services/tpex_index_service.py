@@ -35,7 +35,6 @@ class TpexIndex:
                     FormatHelper.clean_value_to_float(i[2]),
                     FormatHelper.clean_value_to_float(i[3]),
                     FormatHelper.clean_value_to_float(i[5]),
-                    0
                 )
                 records.append(record)
             return records
