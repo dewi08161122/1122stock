@@ -8,12 +8,16 @@ from controllers.KLine_controller import router as KLine_router
 from controllers.stockcategory_controller import router as stockcategory_router
 from controllers.hotstock_controller import router as hotstock_router
 from controllers.member_controller import router as member_router
+from controllers.watchlist_controller import router as watchlist_router
+from controllers.selfstock_controller import router as selfstock_router
 
 app.include_router(KLine_router)
 app.include_router(todaymarket_router)
 app.include_router(stockcategory_router)
 app.include_router(hotstock_router)
 app.include_router(member_router)
+app.include_router(watchlist_router)
+app.include_router(selfstock_router)
 
 @app.get("/", include_in_schema=False)
 async def index(request: Request):
