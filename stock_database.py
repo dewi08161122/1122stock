@@ -99,25 +99,30 @@ try:
             "UNIQUE KEY (trade_date))"
             )
             cursor.execute("CREATE TABLE IF NOT EXISTS member(" \
-			"id BIGINT unsigned not null primary key auto_increment," \
-			"email varchar(255) not null," \
-			"password varchar(255) not null);"
-			)
-            cursor.execute("CREATE TABLE IF NOT EXISTS member_hold_stock(" \
-            "id BIGINT unsigned NOT NULL primary key auto_increment," \
-            "user_id BIGINT unsigned not null," \
-            "number VARCHAR(20) NOT NULL," \
-            "hold_number INT," \
-            "hold_price DECIMAL(10, 2)," \
-            "FOREIGN KEY (user_id) REFERENCES member (id)," \
-            "FOREIGN KEY (number) REFERENCES stock_name (number) ON UPDATE CASCADE)"
+            "id BIGINT unsigned not null primary key auto_increment," \
+            "email varchar(255) not null," \
+            "password varchar(255) not null," \
+            "UNIQUE KEY unique_user_email (email))"
             )
             cursor.execute("CREATE TABLE IF NOT EXISTS member_observe_stock(" \
             "id BIGINT unsigned NOT NULL primary key auto_increment," \
             "user_id BIGINT unsigned not null," \
             "number VARCHAR(20) NOT NULL," \
             "FOREIGN KEY (user_id) REFERENCES member (id)," \
-            "FOREIGN KEY (number) REFERENCES stock_name (number) ON UPDATE CASCADE)"
+            "FOREIGN KEY (number) REFERENCES stock_name (number) ON UPDATE CASCADE," \
+            "UNIQUE KEY unique_user_observe (user_id, number))"
+            )
+            cursor.execute("CREATE TABLE IF NOT EXISTS member_stock_transactions(" \
+            "id BIGINT unsigned NOT NULL primary key auto_increment," \
+            "user_id BIGINT unsigned not null," \
+            "number VARCHAR(20) NOT NULL," \
+            "hold_volume INT NOT NULL," \
+            "hold_price DECIMAL(10, 2) NOT NULL," \
+            "trade_date DATE NOT NULL," \
+            "last_update DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP," \
+            "FOREIGN KEY (user_id) REFERENCES member (id)," \
+            "FOREIGN KEY (number) REFERENCES stock_name (number) ON UPDATE CASCADE," \
+            "INDEX (user_id, number))"
             )
             con.commit()
 
