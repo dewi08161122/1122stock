@@ -1,3 +1,4 @@
+const stockId = window.location.pathname.split('/').pop();
 const KLine = document.querySelector('.KLine');
 const chart = LightweightCharts.createChart(KLine, {
     width: KLine.clientWidth,
@@ -72,7 +73,6 @@ chart.priceScale("vol").applyOptions({
 
 
 async function KLineData() {
-    const stockId = window.location.pathname.split('/').pop();
     const nameSpan = document.querySelector('.stock-name');
     let response=await fetch(`/api/stock/${stockId}`,{
         method:"GET"
@@ -155,5 +155,40 @@ const resizeObserver = new ResizeObserver(entries => {
     const { width, height } = entries[0].contentRect;
     chart.applyOptions({ width, height });
 });
-
+const ob_button = document.querySelector('.ob_button');
+const login_box = document.getElementById("login");
+const opacity = document.querySelector(".opacity");
+ob_button.onclick = async () => {
+    const isLogin = document.body.dataset.login === "true";
+    if (!isLogin) {
+        if (login_box && opacity) {
+            login_box.style.display = "block";
+            opacity.style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        return;
+    }
+    try {
+        const response = await fetch('/api/watchlist', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "number": stockId })
+        });
+        const result = await response.json();
+        if (result.ok) {
+            alert(`✅ 成功！股票 ${stockId} 已加入觀察名單`);
+            return;
+        }
+        if (result.error) {
+            alert(`❌ 錯誤：${result.message}`);
+        } else {
+            alert(`ℹ️ 提示：股票 ${stockId} 已經在您的觀察名單中了`);
+        }
+    } catch (error) {
+        console.error("加入觀察名單發生異常:", error);
+        alert("⚠️ 系統連線異常，請稍後再試");
+    }
+};
 resizeObserver.observe(KLine);

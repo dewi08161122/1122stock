@@ -7,7 +7,7 @@ class TpexStock:
         url = "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes" 
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-            'Referer': 'https://www.tpex.org.tw/zh-tw/mainboard/after-trading/daily-close-quotes.html',
+            'Referer': 'https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes',
             'X-Requested-With': 'XMLHttpRequest',
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         }

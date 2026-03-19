@@ -112,10 +112,13 @@ async function getNavbar() {
         })
         let result=await response.json();
         if (result.ok){
-            member_btn.textContent="會員登出"
+            member_btn.textContent="會員登出";
+            document.body.dataset.login = "true";
         }else {
         member_btn.textContent = "會員登入";
+        document.body.dataset.login = "false";
         }
+        window.dispatchEvent(new CustomEvent("authStatusReady"));
         console.log("login response status:", response.status);
         console.log("login result:", result);
     }

@@ -5,6 +5,48 @@ body{
     font-family: "Noto Sans TC";
     font-style: normal;
 }
+.prompt-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    text-align: center;
+}
+.prompt-box {
+    background-color: #1e1e1e;
+    padding: 40px 60px;
+    border-radius: 15px;
+    border: 1px solid #333;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.prompt-title {
+    font-size: 28px;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+.prompt-subtitle {
+    font-size: 16px;
+    color: #b2b5be;
+    margin-bottom: 30px;
+}
+.login-link {
+    color: #2962ff;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+.login-link:hover {
+    color: #448aff;
+}
+.time-container {
+    max-width: 1200px;
+    margin: 20px auto 0;
+    padding: 0 15px;
+    color: #b2b5be;
+    font-size: 14px;
+}
 .watchlist{
     display: grid;
     margin: auto;
@@ -54,3 +96,88 @@ body{
 .up { color: #ef5350; } 
 .down { color: #26a69a; } 
 .draw { color:#ffeb3b; } 
+
+.search-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    text-align: center;
+}
+.search-box {
+    position: relative;
+    width: 400px;
+    margin: 0 auto;
+}
+.stock-search {
+    width: 100%; 
+    box-sizing: border-box;
+    max-width: 100%; 
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 4px;
+    color: #ffffff;
+    padding: 10px 15px;
+    font-size: 16px;
+    outline: none;
+    text-align: center;
+}
+
+#stock-search:focus {
+    border-color: #555;
+    background-color: #252525;
+}
+.search-suggestions {
+    position: absolute;
+    width: 100%;
+    box-sizing: border-box;
+    top: 100%;  
+    left: 0;
+    right: 0;
+    width: 100%;    
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-top: none;
+    z-index: 1000;
+    overflow-y: auto;
+    border-radius: 0 0 4px 4px; 
+    box-sizing: border-box;  
+}
+
+.suggestion-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #333;
+    cursor: pointer;
+}
+
+.suggestion-item .info {
+    display: flex;
+    gap: 15px;
+}
+
+.stock-no {
+    color: #ffeb3b; /* 股票代號用黃色強調 */
+    font-weight: bold;
+}
+.stock-no, .stock-nm {
+    cursor: pointer;
+}
+.status-add {
+    color: #2962ff;
+    font-size: 13px;
+    border: 1px solid #2962ff;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.status-added {
+    color: #888;
+    font-size: 13px;
+}
+
+.suggestion-item:hover .status-add {
+    background-color: #2962ff;
+    color: white;
+}

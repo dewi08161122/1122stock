@@ -38,7 +38,7 @@ class SearchModel:
         try:
             with get_connection() as con:
                 with con.cursor(dictionary=True) as cursor:
-                    cursor.execute("SELECT  trade_date as time,open_price as open, high_price as high, low_price as low, close_price as close, change_price as change_price,(change_price / (close_price - change_price) * 100) as percent, stock_prices.number, name FROM stock_prices JOIN stock_name ON stock_prices.number = stock_name.number WHERE trade_date = %s ORDER BY trade_value DESC LIMIT 30",[trade_date])
+                    cursor.execute("SELECT trade_date as time,open_price as open, high_price as high, low_price as low, close_price as close, change_price as change_price,(change_price / (close_price - change_price) * 100) as percent, stock_prices.number, name FROM stock_prices JOIN stock_name ON stock_prices.number = stock_name.number WHERE trade_date = %s ORDER BY trade_value DESC LIMIT 30",[trade_date])
                     result = cursor.fetchall()
                     for i in result:
                         i["time"]=str(i["time"])
