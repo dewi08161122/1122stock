@@ -3,28 +3,24 @@ async function renderHotStocks() {
     const timeDisplay = document.querySelector('.time');
 
     try {
-        // 抓取後端 API
         const response = await fetch('/api/hotstock/value');
-        const data = await response.json();
+        const result = await response.json();
 
-        if (data.error) {
-            marketContainer.innerHTML = `<p style="color: red;">資料載入失敗: ${data.message}</p>`;
+        if (!result.ok || result.error) {
+            marketContainer.innerHTML = `<p style="color: red;">資料載入失敗: ${result.message}</p>`;
             return;
         }
-
+        const stocksArray = result.data;
         marketContainer.innerHTML = '';
 
-        // 更新頁面上的資料日期 (顯示最後取得資料的日期)
-        if (data.length > 0) {
-            timeDisplay.textContent = `資料日期：${data[0].time}`;
+        if (stocksArray.length > 0) {
+            timeDisplay.textContent = `資料日期：${stocksArray[0].time}`;
         }
 
-        // 渲染 30 筆資料
-        data.forEach(stock => {
+       stocksArray.forEach(stock => {
             const stockContent = document.createElement('div');
             stockContent.className = 'stock-content';
 
-            // 判斷漲跌顏色與符號
             let trendClass = 'draw';
             let trendSymbol = '─';
             if (stock.change_price > 0) {
@@ -35,7 +31,6 @@ async function renderHotStocks() {
                 trendSymbol = '▼';
             }
 
-            // 建立內部 HTML
             stockContent.innerHTML = `
                 <div class="stock-main">
                     <a href="/stock/${stock.number}" class="stock-name">${stock.number} &nbsp; ${stock.name}</a>
@@ -56,5 +51,4 @@ async function renderHotStocks() {
     }
 }
 
-// 頁面載入後執行
 document.addEventListener('DOMContentLoaded', renderHotStocks);

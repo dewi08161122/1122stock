@@ -16,7 +16,7 @@ def gethotstock():
             if trade_date.weekday() >= 5:
                 continue
             data = SearchModel.get_trade_value_ranking(trade_date)
-        return data
+        return {"ok": True, "data": data}
     except Exception as e:
         print(e)
         return{"error":True,"message":"伺服器內部錯誤"}
