@@ -36,6 +36,9 @@ def update_hold(body: dict=Body(...),token: str = Cookie(None)):
         hold_volume = int(body["hold_volume"])
         hold_price = float(body["hold_price"])
         trade_date = body["trade_date"].replace('/', '-')
+        if hold_volume == 0:
+            success = FunctionModel.delete_hold_by_id(user_id, id)
+            return{"ok":success}
         success = FunctionModel.put_hold(id, user_id, hold_volume, hold_price, trade_date)
         return{"ok":success}
     except Exception as e:
