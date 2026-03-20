@@ -51,6 +51,8 @@ async function renderWatchlist() {
             }
 
             stockContent.innerHTML = `
+                <div class="delete-btn" data-number="${stock.number}" onclick="deleteStock(event)">&times;</div>
+        
                 <div class="stock-main">
                     <a href="/stock/${stock.number}" class="stock-name">${stock.number} &nbsp; ${stock.name}</a>
                     <div class="stock-price ${trendClass}">${stock.close.toFixed(2)}</div>
@@ -105,7 +107,6 @@ function renderSuggestions(stocks) {
         const item = document.createElement('div');
         item.className = 'suggestion-item';
         
-        // 1. 判斷是否已經在觀察名單中
         const isObserved = currentWatchlist.some(s => String(s.number).trim() === String(stock.number).trim());
         const actionText = isObserved 
             ? '<span class="status-added">已加入</span>' 
@@ -119,15 +120,11 @@ function renderSuggestions(stocks) {
             ${actionText}
         `;
         
-        // 2. 點擊邏輯
         item.onclick = async (e) => {
-            // 如果已加入，跳出提示視窗
             if (isObserved) {
                 alert(`ℹ️ 提示：股票 ${stock.number} 已經在您的觀察名單中了`);
                 return;
             }
-
-            // 如果未加入，執行加入邏輯
             try {
                 const response = await fetch('/api/watchlist', {
                     method: 'POST',
@@ -140,7 +137,6 @@ function renderSuggestions(stocks) {
                     alert(`✅ 成功！股票 ${stock.number} 已加入觀察名單`);
                     window.location.reload(); 
                 } else if (result.error) {
-                    // 若未登入，觸發 Navbar 登入框
                     if (result.message.includes("未登入") || result.message.includes("憑證")) {
                         const login_box = document.getElementById("login");
                         const opacity = document.querySelector(".opacity");
@@ -161,11 +157,39 @@ function renderSuggestions(stocks) {
     resultsContainer.style.display = 'block';
 }
 
-// 點擊頁面其他地方時隱藏選單
 document.addEventListener('click', (e) => {
     if (!e.target.closest('.search-box')) {
         resultsContainer.style.display = 'none';
     }
 });
+async function deleteStock(event) {
+
+    event.stopPropagation();
+    event.preventDefault();
+
+    const deleteBtn = event.currentTarget;
+    const stockNumber = deleteBtn.dataset.number;
+
+    if (!confirm(`確定要將股票 ${stockNumber} 從觀察名單中移除嗎？`)) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/watchlist/${stockNumber}`, {
+            method: 'DELETE',
+        });
+        const result = await response.json();
+
+        if (result.ok) {
+            alert(`✅ 成功移除股票 ${stockNumber}`);
+            window.location.reload(); 
+        } else if (result.error) {
+            alert(`❌ 移除失敗：${result.message}`);
+        }
+    } catch (error) {
+        console.error("刪除失敗", error);
+        alert("⚠️ 系統連線異常，請稍後再試");
+    }
+}
 
 document.addEventListener('DOMContentLoaded', renderWatchlist);
