@@ -31,6 +31,11 @@ async function getNavbar() {
             }
         }
     });
+    opacity.addEventListener("click", () => {
+        login_box.style.display = "none";
+        sign_box.style.display = "none";
+        opacity.style.display = "none";
+    });
     const closes = document.querySelectorAll(".close");
     const sign_box = document.getElementById("sign");
     closes.forEach(close => {
