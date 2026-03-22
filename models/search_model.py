@@ -24,10 +24,23 @@ class SearchModel:
     @staticmethod
     def search_stock(keyword: str):
         try:
-            search_param = f"%{keyword}%"
+            search = f"{keyword}%"
+            sql = """
+                SELECT number, name 
+                FROM stock_name 
+                WHERE number LIKE %s OR name LIKE %s 
+                ORDER BY 
+                (number = %s) DESC,
+                (number LIKE %s) DESC,
+                (name LIKE %s) DESC 
+                LIMIT 10
+            """
             with get_connection() as con:
                 with con.cursor(dictionary=True) as cursor:
-                    cursor.execute("SELECT number, name FROM stock_name WHERE number LIKE %s OR name LIKE %s LIMIT 10",[search_param,search_param])
+                    cursor.execute(sql, [
+                        search, search, 
+                        keyword, search, search
+                    ])
                     result = cursor.fetchall()
                     return result
         except Exception as e:
