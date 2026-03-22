@@ -128,5 +128,20 @@ async function getNavbar() {
         console.log("login result:", result);
     }
     await check()
+    // 顯示目前的頁面位置
+    function staypage() {
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.bar');
+
+    navLinks.forEach(link => {
+        const linkPath = link.getAttribute('href');
+        if (currentPath === linkPath) {
+            link.classList.add('active-page');
+        } else {
+            link.classList.remove('active-page');
+        }
+    });
+    }
+    staypage();
 }
 getNavbar();

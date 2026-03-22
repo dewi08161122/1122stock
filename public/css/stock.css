@@ -11,19 +11,19 @@ body{
     padding: 20px;
     gap: 20px;
 }
-.list {
+.klist {
     display: flex;
     gap: 5px;
     padding: 10px 0;
 }
-.bar {
+.kbar {
     cursor: pointer;
     padding: 5px 15px;
     border-radius: 4px;
     background-color: #2b2b2b;
     transition: background 0.3s;
 }
-.bar:hover {
+.kbar:hover {
     background-color: #3f3f3f;
 }
 .ob_button {

@@ -177,3 +177,9 @@
     opacity: 0.25;
     z-index: 4;
 }
+.active-page {
+    color: #00ffff ;
+    transform: scale(1.1);
+    display: inline-block;
+    border-bottom: 2px solid #00ffff;
+}
