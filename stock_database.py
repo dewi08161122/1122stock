@@ -74,7 +74,7 @@ try:
             "trade_value BIGINT," \
             "FOREIGN KEY (number) REFERENCES stock_name (number) ON UPDATE CASCADE," \
             "UNIQUE KEY (number, trade_date)," \
-            "INDEX (trade_date))"
+            "INDEX (trade_date, trade_value))"
             )
             cursor.execute("CREATE TABLE IF NOT EXISTS TAIEX_prices(" \
             "id BIGINT unsigned NOT NULL primary key auto_increment," \

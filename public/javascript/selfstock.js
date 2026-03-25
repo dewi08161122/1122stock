@@ -56,7 +56,7 @@ async function renderHoldlist() {
                 <td>${stock.close.toFixed(2)}</td>
                 <td>${Number(Math.round(stock.value)).toLocaleString()}</td>
                 <td>
-                    <button class="btn-adjust" onclick="openAdjustModal('${stock.number}')">成本調整</button>
+                    <button class="btn-adjust" onclick="openAdjustModal('${stock.number}')">持有記錄調整</button>
                     <button class="btn-delete-all" onclick="deleteStockAll('${stock.number}')">全刪</button>
                 </td>
             `;
