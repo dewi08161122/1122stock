@@ -6,7 +6,7 @@ let currentOffset = 0;
 let isLoading = false;
 let hasMoreData = true;
 
-// ===== 左上資訊區 =====
+// 左上資訊區
 const infoBar = document.createElement('div');
 infoBar.className = 'kline-info-bar';
 infoBar.style.position = 'absolute';
@@ -21,7 +21,7 @@ infoBar.style.fontFamily = 'sans-serif';
 KLine.style.position = 'relative';
 KLine.appendChild(infoBar);
 
-// ===== 建立圖表 =====
+// 建立圖表
 const chart = LightweightCharts.createChart(KLine, {
     width: KLine.clientWidth,
     height: KLine.clientHeight,
@@ -43,7 +43,7 @@ const chart = LightweightCharts.createChart(KLine, {
     },
 });
 
-// ===== K線 =====
+// K線
 const candlestickSeries = chart.addSeries(LightweightCharts.CandlestickSeries, {
     upColor: '#ef5350',
     downColor: '#26a69a',
@@ -51,28 +51,28 @@ const candlestickSeries = chart.addSeries(LightweightCharts.CandlestickSeries, {
     wickUpColor: '#ef5350',
     wickDownColor: '#26a69a',
     priceLineVisible: false,
-    lastValueVisible: false,      // 關掉右側最新價格
+    lastValueVisible: false,
 });
 
-// ===== 成交量 =====
+// 成交量
 const volumeSeries = chart.addSeries(LightweightCharts.HistogramSeries, {
     priceFormat: { type: "volume" },
     priceScaleId: "vol",
-    lastValueVisible: false,      // 關掉右側成交量最新值標籤
+    lastValueVisible: false,
     priceLineVisible: false,
 });
 
-// ===== 主圖區 =====
+// 主圖區
 chart.priceScale("right").applyOptions({
     visible: true,
     autoScale: true,
     scaleMargins: {
         top: 0.12,
-        bottom: 0.25, // 上面主圖
+        bottom: 0.25,
     },
 });
 
-// ===== 成交量區 =====
+// 成交量區
 chart.priceScale("vol").applyOptions({
     visible: true,
     autoScale: true,
@@ -82,7 +82,7 @@ chart.priceScale("vol").applyOptions({
     },
 });
 
-// ===== MA =====
+// MA
 const maSeries = {
     ma5: chart.addSeries(LightweightCharts.LineSeries, {
         color: "#ffeb3b",
@@ -114,7 +114,7 @@ const maSeries = {
     }),
 };
 
-// ===== 取得股票顯示名稱 =====
+// 取得股票顯示名稱
 function getStockDisplayInfo(data) {
     if (stockId === "TAIEX") {
         return { number: "TAIEX", name: "加權指數" };
@@ -138,7 +138,12 @@ function formatPrice(val) {
 
 function formatVolume(val) {
     if (val == null || Number.isNaN(val)) return "--";
-    return Number(val).toLocaleString('zh-TW');
+
+    if (stockId === "TAIEX" || stockId === "TPEX") {
+        return (val / 100000000).toFixed(2) + " 億";
+    }
+
+    return Number(val).toLocaleString('zh-TW') + " 張";
 }
 
 function formatDate(time) {
@@ -150,7 +155,7 @@ function formatDate(time) {
     return String(time);
 }
 
-// ===== 更新左上資訊 =====
+// 更新左上資訊
 function updateInfoBar(barData, data) {
     const stockInfo = getStockDisplayInfo(data);
 
@@ -240,7 +245,7 @@ async function fetchKLineData(isInitial = true) {
     }
 }
 
-// ===== 畫圖 =====
+// K線圖和成交量圖
 function renderKLine(data, isInitial) {
     candlestickSeries.setData(data);
 
@@ -248,11 +253,11 @@ function renderKLine(data, isInitial) {
         let color;
 
         if (d.close > d.open) {
-            color = '#ef5350'; // 漲
+            color = '#ef5350'; 
         } else if (d.close < d.open) {
-            color = '#26a69a'; // 跌
+            color = '#26a69a'; 
         } else {
-            color = '#ffd54f'; // 👉 平盤（黃）
+            color = '#ffd54f'; 
         }
 
         return {
@@ -272,16 +277,16 @@ function renderKLine(data, isInitial) {
     let color;
 
     if (i === 0) {
-        color = '#999999'; // 第一根
+        color = '#999999'; 
     } else {
         const prevClose = data[i - 1].close;
 
         if (d.close > prevClose) {
-            color = '#ef5350'; // 漲
+            color = '#ef5350'; 
         } else if (d.close < prevClose) {
-            color = '#26a69a'; // 跌
+            color = '#26a69a'; 
         } else {
-            color = '#ffd54f'; // 👉 平盤（黃）
+            color = '#ffd54f'; 
         }
     }
 
@@ -312,7 +317,7 @@ volumeSeries.setData(volumeData);
     }
 }
 
-// ===== MA 計算 =====
+// MA 計算
 function calculateMA(data, day) {
     const result = [];
     for (let i = 0; i < data.length; i++) {
@@ -334,7 +339,7 @@ function calculateMA(data, day) {
     return result;
 }
 
-// ===== 滑鼠移動時更新左上資訊 =====
+// 移動時更新左上資訊
 chart.subscribeCrosshairMove(param => {
     if (!param || !param.time || !allData.length) {
         updateInfoBar(null, allData);
@@ -349,7 +354,7 @@ chart.subscribeCrosshairMove(param => {
     }
 });
 
-// ===== 無限滾動 =====
+// 無限滾動
 chart.timeScale().subscribeVisibleLogicalRangeChange((range) => {
     if (!range) return;
     const preloadThreshold = 120;
@@ -358,7 +363,6 @@ chart.timeScale().subscribeVisibleLogicalRangeChange((range) => {
     }
 });
 
-// ===== Resize =====
 const resizeObserver = new ResizeObserver(entries => {
     if (!entries.length) return;
     const { width, height } = entries[0].contentRect;
@@ -366,5 +370,50 @@ const resizeObserver = new ResizeObserver(entries => {
 });
 resizeObserver.observe(KLine);
 
-// ===== 啟動 =====
 fetchKLineData(true);
+
+// 會員功能(加入觀察名單)
+const ob_button = document.querySelector('.ob_button');
+
+if (ob_button) {
+    if (stockId === "TAIEX" || stockId === "TPEX") {
+        ob_button.style.display = "none";
+    } else {
+        ob_button.style.display = "";
+        ob_button.onclick = async () => {
+            const isLogin = document.body.dataset.login === "true";
+
+            if (!isLogin) {
+                const login_box = document.getElementById("login");
+                const opacity = document.querySelector(".opacity");
+
+                if (login_box && opacity) {
+                    login_box.style.display = "block";
+                    opacity.style.display = "block";
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/watchlist', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ number: stockId })
+                });
+
+                const result = await response.json();
+
+                if (result.ok) {
+                    alert(`✅ 成功！股票 ${stockId} 已加入觀察名單`);
+                } else if (result.error) {
+                    alert(`❌ 錯誤：${result.message}`);
+                } else {
+                    alert(`ℹ️ 提示：股票 ${stockId} 已經在您的觀察名單中了`);
+                }
+            } catch (error) {
+                alert("⚠️ 系統連線異常，請稍後再試");
+            }
+        };
+    }
+}

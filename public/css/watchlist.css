@@ -57,16 +57,22 @@ body{
     background-color: #121212;
 }
 .stock-content{
-    position: relative;
-    background-color: #2a2a2a;
-    color: #e0e0e0;
-    border: 1px solid #444;
-    border-radius: 20px;
-    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px; 
+    background: #1e1e1e;
+    border-radius: 12px;
+    transition: background 0.2s ease, transform 0.1s ease; 
+    border: 1px solid transparent;
 }
 .stock-content:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    background: #2a2a2a;
+    border-color: #444;
+}
+.stock-content:hover .stock-name {
+    color: #00d2ff;
 }
 .delete-btn {
     position: absolute;
@@ -100,20 +106,19 @@ body{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 10px 20px;
 }
 .stock-name{
-    font-size: 24px;
-    font-weight:bold;
-    color: #ffffff;
-    margin-bottom: 15px;
-    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 8px;
+    transition: color 0.2s ease;
 }
 .stock-name:hover {
     color: #00ffff; 
 }
 .stock-price {
-    font-size: 30px;
+    font-size: 24px;
     font-weight: bold;
     color: #fff;
     margin-bottom: 15px;
@@ -213,4 +218,9 @@ body{
 .suggestion-item:hover .status-add {
     background-color: #2962ff;
     color: white;
+}
+.mini-k-chart {
+    margin-left: 15px;
+    width: 30px; 
+    height: 50px;
 }
