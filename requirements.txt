@@ -4,3 +4,4 @@ python-dotenv
 pyjwt
 mysql-connector-python
 python-multipart
+cachetools
