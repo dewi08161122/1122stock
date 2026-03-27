@@ -7,7 +7,7 @@ from infrastructure.network import get_json_by_url
 import time, random
 from datetime import timedelta, date
 
-def get_TwseStock_data(start_date, end_date):  # 資料進度 2018, 1, 1
+def get_TwseStock_data(start_date, end_date):  # 資料進度 2012, 1, 1
     number_data = set(StockModel.get_all_stock_numbers())
     while start_date >= end_date:
         if start_date.weekday() >= 5:
@@ -26,11 +26,11 @@ def get_TwseStock_data(start_date, end_date):  # 資料進度 2018, 1, 1
         sleep_time = random.uniform(5, 12) 
         time.sleep(sleep_time)
 
-# start = date(2018, 1, 1)
-# end = date(2017, 1, 1)
+start = date(2026, 3, 23)
+end = date(2026, 3, 23)
 # get_TwseStock_data(start, end) # 上市個股進度
 
-def get_TwseIndex_data(start_date, end_date):  # 資料進度 2017, 1, 1
+def get_TwseIndex_data(start_date, end_date):  # 資料進度 2010, 1, 1
     while start_date >= end_date:
         url_TW_k,url_TW_v=TwseIndex.get_TWindex_url(start_date)
         jsondata_TW_k=get_json_by_url(url_TW_k)
@@ -47,15 +47,14 @@ def get_TwseIndex_data(start_date, end_date):  # 資料進度 2017, 1, 1
         sleep_time = random.uniform(12, 20) 
         time.sleep(sleep_time)
 
-# start = date(2019, 1, 1)
-# end = date(2019, 1, 1)
-# get_TwseIndex_data(start, end) # 上市大盤進度
+# start = date(2018, 12, 22)
+# end = date(2018, 12, 22)
+get_TwseIndex_data(start, end) # 上市大盤進度
 
-def get_TpexIndex_data(start_date, end_date):  # 資料進度 2018, 1, 1
+def get_TpexIndex_data(start_date, end_date):  # 資料進度 2010, 1, 1
     while start_date >= end_date:
         jsondata=TpexIndex.get_TpexIndex_data(start_date)
         TPEX_data=TpexIndex.clean_TpexIndex_data_without_value(jsondata)
-        print(TPEX_data)
         if TPEX_data:
             StockModel.save_TPEX_prices(TPEX_data)
             print(f"[{start_date.strftime('%Y-%m')}] 儲存完成。")
@@ -66,11 +65,11 @@ def get_TpexIndex_data(start_date, end_date):  # 資料進度 2018, 1, 1
         sleep_time = random.uniform(12, 20) 
         time.sleep(sleep_time)
 
-# start = date(2026, 3, 12)
-# end = date(2026, 3, 11)
+# start = date(2026, 3, 16)
+# end = date(2026, 3, 16)
 # get_TpexIndex_data(start, end) # 上櫃指數進度-指數成交金額
 
-def get_TpexStock_data(start_date, end_date):  # 資料進度 2018, 1, 1
+def get_TpexStock_data(start_date, end_date):  # 資料進度 2017, 10, 15
     number_data = set(StockModel.get_all_stock_numbers())
     while start_date >= end_date:
         if start_date.weekday() >= 5:
@@ -93,6 +92,6 @@ def get_TpexStock_data(start_date, end_date):  # 資料進度 2018, 1, 1
         sleep_time = random.uniform(5, 12) 
         time.sleep(sleep_time)
 
-# start = date(2026, 3, 12)
-# end = date(2026, 3, 2)
+# start = date(2026, 3, 19)
+# end = date(2026, 3, 19)
 # get_TpexStock_data(start, end) # 上櫃個股進度+上櫃指數成交金額
