@@ -98,14 +98,14 @@ const maSeries = {
         lastValueVisible: false,
         crosshairMarkerVisible: false,
     }),
-    ma30: chart.addSeries(LightweightCharts.LineSeries, {
+    ma20: chart.addSeries(LightweightCharts.LineSeries, {
         color: "#b73bff",
         lineWidth: 1,
         priceLineVisible: false,
         lastValueVisible: false,
         crosshairMarkerVisible: false,
     }),
-    ma90: chart.addSeries(LightweightCharts.LineSeries, {
+    ma60: chart.addSeries(LightweightCharts.LineSeries, {
         color: "#ffffff",
         lineWidth: 1,
         priceLineVisible: false,
@@ -165,8 +165,8 @@ function updateInfoBar(barData, data) {
 
     const ma5 = getSingleMAValue(data, 5, target.time);
     const ma10 = getSingleMAValue(data, 10, target.time);
-    const ma30 = getSingleMAValue(data, 30, target.time);
-    const ma90 = getSingleMAValue(data, 90, target.time);
+    const ma20 = getSingleMAValue(data, 20, target.time);
+    const ma60 = getSingleMAValue(data, 60, target.time);
 
     const prev = findPreviousBar(data, target.time);
     const change = prev ? (target.close - prev.close) : 0;
@@ -195,8 +195,8 @@ function updateInfoBar(barData, data) {
         <div>
             <span style="color:#ffeb3b;">MA5：${formatPrice(ma5)}</span>
             <span style="color:#3bfff5; margin-left: 12px;">MA10：${formatPrice(ma10)}</span>
-            <span style="color:#b73bff; margin-left: 12px;">MA30：${formatPrice(ma30)}</span>
-            <span style="color:#ffffff; margin-left: 12px;">MA90：${formatPrice(ma90)}</span>
+            <span style="color:#b73bff; margin-left: 12px;">MA20：${formatPrice(ma20)}</span>
+            <span style="color:#ffffff; margin-left: 12px;">MA60：${formatPrice(ma60)}</span>
         </div>
     `;
 }
@@ -208,14 +208,14 @@ function findPreviousBar(data, time) {
 }
 
 function getSingleMAValue(data, day, targetTime) {
-    const index = data.findIndex(d => d.time === targetTime);
-    if (index < day - 1 || index === -1) return null;
+    const bar = data.find(d => d.time === targetTime);
+    if (!bar) return null;
 
-    let sum = 0;
-    for (let i = 0; i < day; i++) {
-        sum += data[index - i].close;
-    }
-    return sum / day;
+    if (day === 5) return bar.ma5;
+    if (day === 10) return bar.ma10;
+    if (day === 20) return bar.ma20; 
+    if (day === 60) return bar.ma60; 
+    return null;
 }
 
 // ===== API =====
@@ -299,10 +299,10 @@ function renderKLine(data, isInitial) {
 
 volumeSeries.setData(volumeData);
 
-    maSeries.ma5.setData(calculateMA(data, 5));
-    maSeries.ma10.setData(calculateMA(data, 10));
-    maSeries.ma30.setData(calculateMA(data, 30));
-    maSeries.ma90.setData(calculateMA(data, 90));
+    maSeries.ma5.setData(data.map(d => ({ time: d.time, value: d.ma5 })));
+    maSeries.ma10.setData(data.map(d => ({ time: d.time, value: d.ma10 })));
+    maSeries.ma20.setData(data.map(d => ({ time: d.time, value: d.ma20 }))); // 注意：你後端算 ma20，前端變數是 ma30，建議統一
+    maSeries.ma60.setData(data.map(d => ({ time: d.time, value: d.ma60 })));
 
     if (isInitial) {
         const N = 150;
@@ -316,29 +316,6 @@ volumeSeries.setData(volumeData);
         }
     }
 }
-
-// MA 計算
-function calculateMA(data, day) {
-    const result = [];
-    for (let i = 0; i < data.length; i++) {
-        if (i < day - 1) {
-            result.push({ time: data[i].time, value: null });
-            continue;
-        }
-
-        let sum = 0;
-        for (let j = 0; j < day; j++) {
-            sum += data[i - j].close;
-        }
-
-        result.push({
-            time: data[i].time,
-            value: sum / day
-        });
-    }
-    return result;
-}
-
 // 移動時更新左上資訊
 chart.subscribeCrosshairMove(param => {
     if (!param || !param.time || !allData.length) {

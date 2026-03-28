@@ -12,23 +12,30 @@ class KLineModel:
                 with con.cursor(dictionary=True) as cursor:
                     sql = """
                         SELECT * FROM (
-                            SELECT 
-                                trade_date as time, 
-                                open_price as open, 
-                                high_price as high, 
-                                low_price as low, 
-                                close_price as close, 
-                                trade_volume as value,
-                                name,
-                                stock_prices.number
-                            FROM stock_prices 
-                            JOIN stock_name ON stock_prices.number = stock_name.number 
-                            WHERE stock_prices.number = %s 
-                            ORDER BY trade_date DESC 
-                            LIMIT 500 OFFSET %s
-                        ) AS subquery
+                            SELECT * FROM (
+                                SELECT 
+                                    trade_date as time, 
+                                    open_price as open, 
+                                    high_price as high, 
+                                    low_price as low, 
+                                    close_price as close, 
+                                    trade_volume as value,
+                                    AVG(close_price) OVER(ORDER BY trade_date ROWS BETWEEN 4 PRECEDING AND CURRENT ROW) as ma5, 
+                                    AVG(close_price) OVER(ORDER BY trade_date ROWS BETWEEN 9 PRECEDING AND CURRENT ROW) as ma10,
+                                    AVG(close_price) OVER(ORDER BY trade_date ROWS BETWEEN 19 PRECEDING AND CURRENT ROW) as ma20,
+                                    AVG(close_price) OVER(ORDER BY trade_date ROWS BETWEEN 59 PRECEDING AND CURRENT ROW) as ma60,
+                                    name,
+                                    stock_prices.number
+                                FROM stock_prices 
+                                JOIN stock_name ON stock_prices.number = stock_name.number 
+                                WHERE stock_prices.number = %s 
+                                ORDER BY time DESC 
+                                LIMIT 560 OFFSET %s
+                            ) AS full_data 
+                            LIMIT 500
+                        ) AS page_data
                         ORDER BY time ASC
-                    """
+                    """# BETWEEN ... AND ...定義範圍,PRECEDING往前數幾筆,CURRENT ROW=包含現在這一筆
                     cursor.execute(sql, [stockNumber,offset])
                     result = cursor.fetchall()
                     for i in result:
@@ -38,6 +45,10 @@ class KLineModel:
                         i["low"]=float(i["low"])
                         i["close"]=float(i["close"])
                         i["value"]=int(i["value"]) if i["value"] is not None else 0
+                        i["ma5"] = float(i["ma5"]) if i["ma5"] is not None else 0
+                        i["ma10"] = float(i["ma10"]) if i["ma10"] is not None else 0
+                        i["ma20"] = float(i["ma20"]) if i["ma20"] is not None else 0
+                        i["ma60"] = float(i["ma60"]) if i["ma60"] is not None else 0
                     if result:
                         KLINE_CACHE[cache_key] = result
                     return result
@@ -54,17 +65,24 @@ class KLineModel:
                 with con.cursor(dictionary=True) as cursor:
                     sql = """
                         SELECT * FROM (
-                            SELECT 
-                                trade_date as time, 
-                                open_price as open, 
-                                high_price as high, 
-                                low_price as low, 
-                                close_price as close, 
-                                trade_value as value 
-                            FROM TAIEX_prices 
-                            ORDER BY trade_date DESC 
-                            LIMIT 500 OFFSET %s
-                        ) AS subquery
+                            SELECT * FROM (
+                                SELECT 
+                                    trade_date as time, 
+                                    open_price as open, 
+                                    high_price as high, 
+                                    low_price as low, 
+                                    close_price as close, 
+                                    trade_value as value, 
+                                    AVG(close_price) OVER(ORDER BY trade_date ROWS BETWEEN 4 PRECEDING AND CURRENT ROW) as ma5, 
+                                    AVG(close_price) OVER(ORDER BY trade_date ROWS BETWEEN 9 PRECEDING AND CURRENT ROW) as ma10,
+                                    AVG(close_price) OVER(ORDER BY trade_date ROWS BETWEEN 19 PRECEDING AND CURRENT ROW) as ma20,
+                                    AVG(close_price) OVER(ORDER BY trade_date ROWS BETWEEN 59 PRECEDING AND CURRENT ROW) as ma60
+                                FROM TAIEX_prices 
+                                ORDER BY trade_date DESC 
+                                LIMIT 560 OFFSET %s
+                            ) AS full_data 
+                            LIMIT 500
+                        ) AS page_data
                         ORDER BY time ASC
                     """
                     cursor.execute(sql, [offset])
@@ -76,6 +94,10 @@ class KLineModel:
                         i["low"]=float(i["low"])
                         i["close"]=float(i["close"])
                         i["value"]=int(i["value"]) if i["value"] is not None else 0
+                        i["ma5"] = float(i["ma5"]) if i["ma5"] is not None else 0
+                        i["ma10"] = float(i["ma10"]) if i["ma10"] is not None else 0
+                        i["ma20"] = float(i["ma20"]) if i["ma20"] is not None else 0
+                        i["ma60"] = float(i["ma60"]) if i["ma60"] is not None else 0
                     if result:
                         KLINE_CACHE[cache_key] = result
                     return result
@@ -92,17 +114,24 @@ class KLineModel:
                 with con.cursor(dictionary=True) as cursor:
                     sql = """
                         SELECT * FROM (
-                            SELECT 
-                                trade_date as time, 
-                                open_price as open, 
-                                high_price as high, 
-                                low_price as low, 
-                                close_price as close, 
-                                trade_value as value 
-                            FROM TPEX_prices 
-                            ORDER BY trade_date DESC 
-                            LIMIT 500 OFFSET %s
-                        ) AS subquery
+                            SELECT * FROM (
+                                SELECT 
+                                    trade_date as time, 
+                                    open_price as open, 
+                                    high_price as high, 
+                                    low_price as low, 
+                                    close_price as close, 
+                                    trade_value as value, 
+                                    AVG(close_price) OVER(ORDER BY trade_date ROWS BETWEEN 4 PRECEDING AND CURRENT ROW) as ma5, 
+                                    AVG(close_price) OVER(ORDER BY trade_date ROWS BETWEEN 9 PRECEDING AND CURRENT ROW) as ma10,
+                                    AVG(close_price) OVER(ORDER BY trade_date ROWS BETWEEN 19 PRECEDING AND CURRENT ROW) as ma20,
+                                    AVG(close_price) OVER(ORDER BY trade_date ROWS BETWEEN 59 PRECEDING AND CURRENT ROW) as ma60
+                                FROM TPEX_prices 
+                                ORDER BY trade_date DESC 
+                                LIMIT 560 OFFSET %s
+                            ) AS full_data 
+                            LIMIT 500
+                        ) AS page_data
                         ORDER BY time ASC
                     """
                     cursor.execute(sql, [offset])
@@ -114,6 +143,10 @@ class KLineModel:
                         i["low"]=float(i["low"])
                         i["close"]=float(i["close"])
                         i["value"]=int(i["value"]) if i["value"] is not None else 0
+                        i["ma5"] = float(i["ma5"]) if i["ma5"] is not None else 0
+                        i["ma10"] = float(i["ma10"]) if i["ma10"] is not None else 0
+                        i["ma20"] = float(i["ma20"]) if i["ma20"] is not None else 0
+                        i["ma60"] = float(i["ma60"]) if i["ma60"] is not None else 0
                     if result:
                         KLINE_CACHE[cache_key] = result
                     return result
