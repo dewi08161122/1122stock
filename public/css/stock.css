@@ -27,6 +27,12 @@ body{
 .kbar:hover {
     color: #00ffff;
 }
+.kbar.active {
+    background-color: #ef5350;
+    color: white;    
+    border-color: #ef5350;
+    font-weight: bold;
+}
 .ob_button {
     cursor: pointer;
     padding: 5px 15px;

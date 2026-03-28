@@ -76,6 +76,32 @@ try:
             "UNIQUE KEY (number, trade_date)," \
             "INDEX (trade_date, trade_value))"
             )
+            cursor.execute("CREATE TABLE IF NOT EXISTS stock_prices_week(" \
+            "id BIGINT unsigned NOT NULL primary key auto_increment," \
+            "number VARCHAR(20) NOT NULL," \
+            "first_trade_date DATE NOT NULL," \
+            "first_open_price DECIMAL(10, 2)," \
+            "last_close_price DECIMAL(10, 2)," \
+            "max_high_price DECIMAL(10, 2)," \
+            "min_low_price DECIMAL(10, 2)," \
+            "total_trade_volume BIGINT," \
+            "total_trade_value BIGINT," \
+            "FOREIGN KEY (number) REFERENCES stock_name (number) ON UPDATE CASCADE," \
+            "UNIQUE KEY (number, first_trade_date))"
+            )
+            cursor.execute("CREATE TABLE IF NOT EXISTS stock_prices_month(" \
+            "id BIGINT unsigned NOT NULL primary key auto_increment," \
+            "number VARCHAR(20) NOT NULL," \
+            "first_trade_date DATE NOT NULL," \
+            "first_open_price DECIMAL(10, 2)," \
+            "last_close_price DECIMAL(10, 2)," \
+            "max_high_price DECIMAL(10, 2)," \
+            "min_low_price DECIMAL(10, 2)," \
+            "total_trade_volume BIGINT," \
+            "total_trade_value BIGINT," \
+            "FOREIGN KEY (number) REFERENCES stock_name (number) ON UPDATE CASCADE," \
+            "UNIQUE KEY (number, first_trade_date))"
+            )
             cursor.execute("CREATE TABLE IF NOT EXISTS TAIEX_prices(" \
             "id BIGINT unsigned NOT NULL primary key auto_increment," \
             "trade_date DATE NOT NULL," \
@@ -87,6 +113,26 @@ try:
             "trade_value BIGINT," \
             "UNIQUE KEY (trade_date))"
             )
+            cursor.execute("CREATE TABLE IF NOT EXISTS TAIEX_prices_week(" \
+            "id BIGINT unsigned NOT NULL primary key auto_increment," \
+            "first_trade_date DATE NOT NULL," \
+            "first_open_price DECIMAL(10, 2)," \
+            "last_close_price DECIMAL(10, 2)," \
+            "max_high_price DECIMAL(10, 2)," \
+            "min_low_price DECIMAL(10, 2)," \
+            "total_trade_value BIGINT," \
+            "UNIQUE KEY (first_trade_date))"
+            )
+            cursor.execute("CREATE TABLE IF NOT EXISTS TAIEX_prices_month(" \
+            "id BIGINT unsigned NOT NULL primary key auto_increment," \
+            "first_trade_date DATE NOT NULL," \
+            "first_open_price DECIMAL(10, 2)," \
+            "last_close_price DECIMAL(10, 2)," \
+            "max_high_price DECIMAL(10, 2)," \
+            "min_low_price DECIMAL(10, 2)," \
+            "total_trade_value BIGINT," \
+            "UNIQUE KEY (first_trade_date))"
+            )
             cursor.execute("CREATE TABLE IF NOT EXISTS TPEX_prices(" \
             "id BIGINT unsigned NOT NULL primary key auto_increment," \
             "trade_date DATE NOT NULL," \
@@ -97,6 +143,26 @@ try:
             "change_price DECIMAL(10, 2)," \
             "trade_value BIGINT," \
             "UNIQUE KEY (trade_date))"
+            )
+            cursor.execute("CREATE TABLE IF NOT EXISTS TPEX_prices_week(" \
+            "id BIGINT unsigned NOT NULL primary key auto_increment," \
+            "first_trade_date DATE NOT NULL," \
+            "first_open_price DECIMAL(10, 2)," \
+            "last_close_price DECIMAL(10, 2)," \
+            "max_high_price DECIMAL(10, 2)," \
+            "min_low_price DECIMAL(10, 2)," \
+            "total_trade_value BIGINT," \
+            "UNIQUE KEY (first_trade_date))"
+            )
+            cursor.execute("CREATE TABLE IF NOT EXISTS TPEX_prices_month(" \
+            "id BIGINT unsigned NOT NULL primary key auto_increment," \
+            "first_trade_date DATE NOT NULL," \
+            "first_open_price DECIMAL(10, 2)," \
+            "last_close_price DECIMAL(10, 2)," \
+            "max_high_price DECIMAL(10, 2)," \
+            "min_low_price DECIMAL(10, 2)," \
+            "total_trade_value BIGINT," \
+            "UNIQUE KEY (first_trade_date))"
             )
             cursor.execute("CREATE TABLE IF NOT EXISTS member(" \
             "id BIGINT unsigned not null primary key auto_increment," \

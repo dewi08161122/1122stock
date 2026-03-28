@@ -3,6 +3,7 @@ const KLine = document.querySelector('.KLine');
 
 let allData = [];
 let currentOffset = 0;
+let currentPeriod = 'day';
 let isLoading = false;
 let hasMoreData = true;
 
@@ -218,22 +219,26 @@ function getSingleMAValue(data, day, targetTime) {
     return null;
 }
 
-// ===== API =====
+// 取資料
 async function fetchKLineData(isInitial = true) {
     if (isLoading || !hasMoreData) return;
     isLoading = true;
 
     try {
-        const response = await fetch(`/api/stock/${stockId}?offset=${currentOffset}`);
+        const response = await fetch(`/api/stock/${stockId}?offset=${currentOffset}&period=${currentPeriod}`);
         const newData = await response.json();
 
-        if (!newData || newData.length === 0) {
+        if (!newData || newData.length === 0 || newData.error) {
             hasMoreData = false;
             return;
         }
-
-        allData = [...newData, ...allData];
-        currentOffset += 500;
+        if (currentPeriod !== 'day') {
+            allData = newData; 
+            hasMoreData = false;
+        } else {
+            allData = [...newData, ...allData];
+            currentOffset += 500;
+        }
 
         renderKLine(allData, isInitial);
         updateInfoBar(null, allData);
@@ -301,7 +306,7 @@ volumeSeries.setData(volumeData);
 
     maSeries.ma5.setData(data.map(d => ({ time: d.time, value: d.ma5 })));
     maSeries.ma10.setData(data.map(d => ({ time: d.time, value: d.ma10 })));
-    maSeries.ma20.setData(data.map(d => ({ time: d.time, value: d.ma20 }))); // 注意：你後端算 ma20，前端變數是 ma30，建議統一
+    maSeries.ma20.setData(data.map(d => ({ time: d.time, value: d.ma20 }))); 
     maSeries.ma60.setData(data.map(d => ({ time: d.time, value: d.ma60 })));
 
     if (isInitial) {
@@ -393,4 +398,34 @@ if (ob_button) {
             }
         };
     }
+}
+// K線切換
+const kbars = document.querySelectorAll('.kbar');
+
+kbars.forEach(bar => {
+    bar.addEventListener('click', () => {
+        const newPeriod = bar.getAttribute('data-period');
+        
+        kbars.forEach(b => b.classList.remove('active'));
+        bar.classList.add('active');
+
+        changePeriod(newPeriod);
+    });
+});
+
+function changePeriod(newPeriod) {
+    if (currentPeriod === newPeriod) return;
+    
+    currentPeriod = newPeriod;
+    allData = [];
+    currentOffset = 0;
+    hasMoreData = true;
+    candlestickSeries.setData([]);
+    volumeSeries.setData([]);
+    maSeries.ma5.setData([]);
+    maSeries.ma10.setData([]);
+    maSeries.ma20.setData([]);
+    maSeries.ma60.setData([]);
+
+    fetchKLineData(true);
 }
