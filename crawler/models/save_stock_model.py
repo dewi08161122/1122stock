@@ -98,3 +98,84 @@ class StockModel:
         except Exception as e:
             print(f"資料庫讀取失敗: {e}")
             return []
+    @staticmethod
+    def all_kline_to_week_month(target_date):  
+        try:
+            with get_connection() as con:
+                with con.cursor() as cursor:
+                    stock_week_sql = """
+                        INSERT INTO stock_prices_week (number, first_trade_date, first_open_price, last_close_price, max_high_price, min_low_price, total_trade_volume, total_trade_value)
+                        SELECT d1.number, MIN(d1.trade_date),
+                            (SELECT open_price FROM stock_prices d2 WHERE d2.number = d1.number AND d2.trade_date = MIN(d1.trade_date) LIMIT 1),
+                            (SELECT close_price FROM stock_prices d3 WHERE d3.number = d1.number AND d3.trade_date = MAX(d1.trade_date) LIMIT 1),
+                            MAX(d1.high_price), MIN(d1.low_price), SUM(d1.trade_volume), SUM(d1.trade_value)
+                        FROM stock_prices d1
+                        WHERE d1.number IN (SELECT number FROM stock_prices WHERE trade_date = %s)
+                          AND YEARWEEK(d1.trade_date, 1) = YEARWEEK(%s, 1)
+                        GROUP BY d1.number, YEARWEEK(d1.trade_date, 1)
+                        ON DUPLICATE KEY UPDATE 
+                            last_close_price = VALUES(last_close_price), max_high_price = VALUES(max_high_price),
+                            min_low_price = VALUES(min_low_price), total_trade_volume = VALUES(total_trade_volume), total_trade_value = VALUES(total_trade_value);
+                    """
+                    stock_month_sql = """
+                        INSERT INTO stock_prices_month (number, first_trade_date, first_open_price, last_close_price, max_high_price, min_low_price, total_trade_volume, total_trade_value)
+                        SELECT d1.number, MIN(d1.trade_date),
+                            (SELECT open_price FROM stock_prices d2 WHERE d2.number = d1.number AND d2.trade_date = MIN(d1.trade_date) LIMIT 1),
+                            (SELECT close_price FROM stock_prices d3 WHERE d3.number = d1.number AND d3.trade_date = MAX(d1.trade_date) LIMIT 1),
+                            MAX(d1.high_price), MIN(d1.low_price), SUM(d1.trade_volume), SUM(d1.trade_value)
+                        FROM stock_prices d1
+                        WHERE d1.number IN (SELECT number FROM stock_prices WHERE trade_date = %s)
+                          AND DATE_FORMAT(d1.trade_date, '%Y-%m') = DATE_FORMAT(%s, '%Y-%m')
+                        GROUP BY d1.number, DATE_FORMAT(d1.trade_date, '%Y-%m')
+                        ON DUPLICATE KEY UPDATE 
+                            last_close_price = VALUES(last_close_price), max_high_price = VALUES(max_high_price),
+                            min_low_price = VALUES(min_low_price), total_trade_volume = VALUES(total_trade_volume), total_trade_value = VALUES(total_trade_value);
+                    """
+                    TAIEX_week_sql = """
+                        INSERT INTO TAIEX_prices_week (first_trade_date, first_open_price, last_close_price, max_high_price, min_low_price, total_trade_value)
+                        SELECT MIN(trade_date),
+                            (SELECT open_price FROM TAIEX_prices d2 WHERE d2.trade_date = MIN(d1.trade_date) LIMIT 1),
+                            (SELECT close_price FROM TAIEX_prices d3 WHERE d3.trade_date = MAX(d1.trade_date) LIMIT 1),
+                            MAX(high_price), MIN(low_price), SUM(trade_value)
+                        FROM TAIEX_prices d1 WHERE YEARWEEK(trade_date, 1) = YEARWEEK(%s, 1)
+                        ON DUPLICATE KEY UPDATE last_close_price = VALUES(last_close_price), max_high_price = VALUES(max_high_price), min_low_price = VALUES(min_low_price), total_trade_value = VALUES(total_trade_value);
+                    """
+                    TAIEX_month_sql = """
+                        INSERT INTO TAIEX_prices_month (first_trade_date, first_open_price, last_close_price, max_high_price, min_low_price, total_trade_value)
+                        SELECT MIN(trade_date),
+                            (SELECT open_price FROM TAIEX_prices d2 WHERE d2.trade_date = MIN(d1.trade_date) LIMIT 1),
+                            (SELECT close_price FROM TAIEX_prices d3 WHERE d3.trade_date = MAX(d1.trade_date) LIMIT 1),
+                            MAX(high_price), MIN(low_price), SUM(trade_value)
+                        FROM TAIEX_prices d1 WHERE DATE_FORMAT(trade_date, '%Y-%m') = DATE_FORMAT(%s, '%Y-%m')
+                        ON DUPLICATE KEY UPDATE last_close_price = VALUES(last_close_price), max_high_price = VALUES(max_high_price), min_low_price = VALUES(min_low_price), total_trade_value = VALUES(total_trade_value);
+                    """
+                    TPEX_week_sql = """
+                        INSERT INTO TPEX_prices_week (first_trade_date, first_open_price, last_close_price, max_high_price, min_low_price, total_trade_value)
+                        SELECT MIN(trade_date),
+                            (SELECT open_price FROM TPEX_prices d2 WHERE d2.trade_date = MIN(d1.trade_date) LIMIT 1),
+                            (SELECT close_price FROM TPEX_prices d3 WHERE d3.trade_date = MAX(d1.trade_date) LIMIT 1),
+                            MAX(high_price), MIN(low_price), SUM(trade_value)
+                        FROM TPEX_prices d1 WHERE YEARWEEK(trade_date, 1) = YEARWEEK(%s, 1)
+                        ON DUPLICATE KEY UPDATE last_close_price = VALUES(last_close_price), max_high_price = VALUES(max_high_price), min_low_price = VALUES(min_low_price), total_trade_value = VALUES(total_trade_value);
+                    """
+                    TPEX_month_sql = """
+                        INSERT INTO TPEX_prices_month (first_trade_date, first_open_price, last_close_price, max_high_price, min_low_price, total_trade_value)
+                        SELECT MIN(trade_date),
+                            (SELECT open_price FROM TPEX_prices d2 WHERE d2.trade_date = MIN(d1.trade_date) LIMIT 1),
+                            (SELECT close_price FROM TPEX_prices d3 WHERE d3.trade_date = MAX(d1.trade_date) LIMIT 1),
+                            MAX(high_price), MIN(low_price), SUM(trade_value)
+                        FROM TPEX_prices d1 WHERE DATE_FORMAT(trade_date, '%Y-%m') = DATE_FORMAT(%s, '%Y-%m')
+                        ON DUPLICATE KEY UPDATE last_close_price = VALUES(last_close_price), max_high_price = VALUES(max_high_price), min_low_price = VALUES(min_low_price), total_trade_value = VALUES(total_trade_value);
+                    """
+
+                    cursor.execute(stock_week_sql, [target_date, target_date])
+                    cursor.execute(stock_month_sql, [target_date, target_date])
+                    cursor.execute(TAIEX_week_sql, [target_date])
+                    cursor.execute(TAIEX_month_sql, [target_date])
+                    cursor.execute(TPEX_week_sql, [target_date])
+                    cursor.execute(TPEX_month_sql, [target_date])
+                                     
+                    con.commit()
+                    print(f"[{target_date}] 週/月K更新完成。")
+        except Exception as e:
+            print(f"同步過程出錯: {e}")

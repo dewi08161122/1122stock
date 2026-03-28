@@ -89,6 +89,7 @@ def get_today():
         get_TpexIndex_data(start, end)
         get_TwseStock_data(start, end)
         get_TpexStock_data(start, end)
+        StockModel.all_kline_to_week_month(start.strftime('%Y-%m-%d'))
     except Exception as e:
         print(f"執行過程中發生錯誤: {e}")
     finally:
