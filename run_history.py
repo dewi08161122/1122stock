@@ -95,3 +95,18 @@ def get_TpexStock_data(start_date, end_date):  # 資料進度 2017, 10, 15
 # start = date(2026, 3, 19)
 # end = date(2026, 3, 19)
 # get_TpexStock_data(start, end) # 上櫃個股進度+上櫃指數成交金額
+
+# def get_today():
+#     try:
+#         start = date.today()
+#         end = date.today()
+#         get_TwseIndex_data(start, end)
+#         get_TpexIndex_data(start, end)
+#         get_TwseStock_data(start, end)
+#         get_TpexStock_data(start, end)
+#     except Exception as e:
+#         print(f"執行過程中發生錯誤: {e}")
+#     finally:
+#         print("--- 每日更新程序結束 ---", flush=True)
+
+# get_today()
