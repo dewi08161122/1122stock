@@ -1,0 +1,68 @@
+body{
+    background-color: #121212;
+    color: #d1d4dc;
+    margin:0px;
+    font-family: "Noto Sans TC";
+    font-style: normal;
+}
+.market{
+    display: grid;
+    margin: auto;
+    max-width: 1200px; 
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 5px;
+    padding: 15px;
+    background-color: #121212;
+}
+.stock-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background: #1e1e1e; 
+    border-radius: 12px;
+    transition: background 0.2s ease, transform 0.1s ease; 
+    border: 1px solid transparent;
+}
+.stock-content:active {
+    transform: scale(0.98);
+}
+.stock-content:hover {
+    background: #2a2a2a;
+    border-color: #444;
+}
+.stock-content:hover .stock-name {
+    color: #00d2ff;
+}
+.stock-main{
+    flex: 1;
+}
+.stock-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 8px;
+    transition: color 0.2s ease;
+}
+.stock-price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 15px;
+}
+.stock-trend {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+.mini-k-chart {
+    margin-left: 15px;
+    width: 30px; 
+    height: 50px;
+}
+
+.up { color: #ef5350; } 
+.down { color: #26a69a; } 
+.draw { color:#ffeb3b; } 

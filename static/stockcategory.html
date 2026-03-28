@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>類股資訊</title>
+    <link rel="stylesheet" type="text/css" href="/css/stockcategory.css" />
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" class="stock-search" placeholder="輸入股號或股名">
+            <div id="search-results" class="search-suggestions" style="display: none;"></div>
+        </div>
+        <div class="category">
+            <div id="category-container" class="category-grid"></div>
+            <div id="stock-result-area" class="category-name" style="display: none;">
+                <div id="category-title" class="category-box"></div>
+                <div class="stock">
+                    <div id="stock-container" class="stock-grid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/stockcategory.js"></script>
+</body>
+</html>

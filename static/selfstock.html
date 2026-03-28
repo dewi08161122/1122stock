@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>持股名單</title>
+  <link rel="stylesheet" type="text/css" href="/css/selfstock.css" />
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+  <div id="login-prompt" class="prompt-container" style="display: none;">
+    <div class="prompt-box">
+        <h2 class="prompt-title">尚未登入</h2>
+        <p class="prompt-subtitle">請登入以查看您的持股名單</p>
+        <div class="login-link login-trigger">登入</div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="summary-card">
+      <div class="summary-item">
+        <span class="label">持有股票總市值</span>
+        <span class="value" id="total-value">0 TWD</span>
+      </div>
+      <div class="summary-item">
+        <span class="label">總損益</span>
+        <span class="value pnl-positive" id="total-pnl">+0</span>
+      </div>
+    </div>
+
+    <div class="stock-list-container">
+      <table class="stock-table">
+        <thead>
+          <tr>
+            <th>股票</th>
+            <th>股數</th>
+            <th>損益</th>
+            <th>損益率</th>
+            <th>成交均價</th>
+            <th>投資成本</th>
+            <th>市價</th>
+            <th>帳面價值</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="holdlist-body">
+          <!-- <tr>
+            <td>2330 台積電</td>
+            <td>1,000</td>
+            <td class="up">+50,000</td>
+            <td class="up">+5.2%</td>
+            <td>1,000</td>
+            <td>1,000,000</td>
+            <td>1,050</td>
+            <td>1,050,000</td>
+            <td>
+                <button class="btn-adjust" onclick="openAdjustModal('2330')">成本調整</button>
+                <button class="btn-delete-all" onclick="deleteStockAll('2330')">全刪</button>
+            </td>
+          </tr> -->
+        </tbody>
+      </table>
+      <div class="action-bar">
+        <button class="btn-add-stock" onclick="openAddModal()">＋ 新增持股</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-overlay"></div>
+
+  <div class="modal" id="adjust-modal">
+    <div class="modal-header">
+      <h3 id="adjust-title">買進資訊明細</h3>
+      <span class="close-modal" onclick="closeModals()">&times;</span>
+    </div>
+    <div class="modal-body">
+      <table class="detail-table">
+        <thead>
+          <tr>
+            <th>股數</th>
+            <th>成交價</th>
+            <th>成交日期</th>
+            <th>調整</th>
+          </tr>
+        </thead>
+        <tbody id="detail-list-body">
+          </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal" id="add-modal">
+    <div class="modal-header">
+      <h3>新增持股資訊</h3>
+      <span class="close-modal" onclick="closeModals()">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div class="input-group" style="position: relative;"> <label>股票代號</label>
+        <input type="text" id="add-number" placeholder="輸入股號或股名" autocomplete="off">
+        <div id="add-search-results" class="search-suggestions" style="display: none;"></div>
+      </div>
+      <div class="input-group">
+        <label>買進股數</label>
+        <input type="number" id="add-volume" placeholder="股數">
+      </div>
+      <div class="input-group">
+        <label>買進價格</label>
+        <input type="number" step="0.1" id="add-price" placeholder="價格">
+      </div>
+      <div class="input-group">
+        <label>交易日期</label>
+        <input type="date" id="add-date">
+      </div>
+      <button class="btn-confirm" onclick="submitAddHold()">確認新增</button>
+    </div>
+  </div>
+  
+  <script src="/js/navbar.js"></script>
+  <script src="/js/selfstock.js"></script>
+</body>
+</html>
