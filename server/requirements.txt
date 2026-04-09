@@ -5,3 +5,4 @@ pyjwt
 mysql-connector-python
 python-multipart
 cachetools
+redis

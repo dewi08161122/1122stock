@@ -1,12 +1,18 @@
 from infrastructure.connection import get_connection
-from infrastructure.cache import KLINE_CACHE
+from infrastructure.redis import get_redis
+import json
 
 class KLineModel:
     @staticmethod
     def get_stock_KLine(stockNumber: str, offset: int = 0):
-        cache_key = f"stock_{stockNumber}_{offset}"
-        if cache_key in KLINE_CACHE:
-            return KLINE_CACHE[cache_key]
+        cache_key = f"stock_kline:{stockNumber}:{offset}"
+        redis = get_redis()
+        try:
+            cached_data = redis.get(cache_key)
+            if cached_data:
+                return json.loads(cached_data)
+        except Exception as e:
+            print(f"Redis Cache Get Error: {e}")
         try:
             with get_connection() as con:
                 with con.cursor(dictionary=True) as cursor:
@@ -50,16 +56,24 @@ class KLineModel:
                         i["ma20"] = float(i["ma20"]) if i["ma20"] is not None else 0
                         i["ma60"] = float(i["ma60"]) if i["ma60"] is not None else 0
                     if result:
-                        KLINE_CACHE[cache_key] = result
+                        try:
+                            redis.setex(cache_key, 60*60*24, json.dumps(result))
+                        except Exception as e:
+                            print(f"Redis Cache Set Error: {e}")
                     return result
         except Exception as e:
             print(e)
             return None
     @staticmethod
     def get_stock_KLine_week(stockNumber: str):
-        cache_key = f"stock_{stockNumber}_week"
-        if cache_key in KLINE_CACHE:
-            return KLINE_CACHE[cache_key]
+        cache_key = f"stock_kline:{stockNumber}:week"
+        redis = get_redis()
+        try:
+            cached_data = redis.get(cache_key)
+            if cached_data:
+                return json.loads(cached_data)
+        except Exception as e:
+            print(f"Redis Cache Get Error: {e}")
         try:
             with get_connection() as con:
                 with con.cursor(dictionary=True) as cursor:
@@ -96,16 +110,24 @@ class KLineModel:
                         i["ma20"] = float(i["ma20"]) if i["ma20"] is not None else 0
                         i["ma60"] = float(i["ma60"]) if i["ma60"] is not None else 0
                     if result:
-                        KLINE_CACHE[cache_key] = result
+                        try:
+                            redis.setex(cache_key, 60*60*24, json.dumps(result))
+                        except Exception as e:
+                            print(f"Redis Cache Set Error: {e}")
                     return result
         except Exception as e:
             print(e)
             return None
     @staticmethod
     def get_stock_KLine_month(stockNumber: str):
-        cache_key = f"stock_{stockNumber}_month"
-        if cache_key in KLINE_CACHE:
-            return KLINE_CACHE[cache_key]
+        cache_key = f"stock_kline:{stockNumber}:month"
+        redis = get_redis()
+        try:
+            cached_data = redis.get(cache_key)
+            if cached_data:
+                return json.loads(cached_data)
+        except Exception as e:
+            print(f"Redis Cache Get Error: {e}")
         try:
             with get_connection() as con:
                 with con.cursor(dictionary=True) as cursor:
@@ -142,16 +164,24 @@ class KLineModel:
                         i["ma20"] = float(i["ma20"]) if i["ma20"] is not None else 0
                         i["ma60"] = float(i["ma60"]) if i["ma60"] is not None else 0
                     if result:
-                        KLINE_CACHE[cache_key] = result
+                        try:
+                            redis.setex(cache_key, 60*60*24, json.dumps(result))
+                        except Exception as e:
+                            print(f"Redis Cache Set Error: {e}")
                     return result
         except Exception as e:
             print(e)
             return None
     @staticmethod
     def get_TAIEX_KLine(offset: int = 0):
-        cache_key = f"index_TAIEX_{offset}"
-        if cache_key in KLINE_CACHE:
-            return KLINE_CACHE[cache_key]
+        cache_key = f"index_kline:TAIEX:{offset}"
+        redis = get_redis()
+        try:
+            cached_data = redis.get(cache_key)
+            if cached_data:
+                return json.loads(cached_data)
+        except Exception as e:
+            print(f"Redis Cache Get Error: {e}")
         try:
             with get_connection() as con:
                 with con.cursor(dictionary=True) as cursor:
@@ -191,16 +221,24 @@ class KLineModel:
                         i["ma20"] = float(i["ma20"]) if i["ma20"] is not None else 0
                         i["ma60"] = float(i["ma60"]) if i["ma60"] is not None else 0
                     if result:
-                        KLINE_CACHE[cache_key] = result
+                        try:
+                            redis.setex(cache_key, 60*60*24, json.dumps(result))
+                        except Exception as e:
+                            print(f"Redis Cache Set Error: {e}")
                     return result
         except Exception as e:
             print(e)
             return None
     @staticmethod
     def get_TAIEX_KLine_week():
-        cache_key = f"index_TAIEX_week"
-        if cache_key in KLINE_CACHE:
-            return KLINE_CACHE[cache_key]
+        cache_key = f"index_kline:TAIEX:week"
+        redis = get_redis()
+        try:
+            cached_data = redis.get(cache_key)
+            if cached_data:
+                return json.loads(cached_data)
+        except Exception as e:
+            print(f"Redis Cache Get Error: {e}")
         try:
             with get_connection() as con:
                 with con.cursor(dictionary=True) as cursor:
@@ -233,16 +271,24 @@ class KLineModel:
                         i["ma20"] = float(i["ma20"]) if i["ma20"] is not None else 0
                         i["ma60"] = float(i["ma60"]) if i["ma60"] is not None else 0
                     if result:
-                        KLINE_CACHE[cache_key] = result
+                        try:
+                            redis.setex(cache_key, 60*60*24, json.dumps(result))
+                        except Exception as e:
+                            print(f"Redis Cache Set Error: {e}")
                     return result
         except Exception as e:
             print(e)
             return None
     @staticmethod
     def get_TAIEX_KLine_month():
-        cache_key = f"index_TAIEX_month"
-        if cache_key in KLINE_CACHE:
-            return KLINE_CACHE[cache_key]
+        cache_key = f"index_kline:TAIEX:month"
+        redis = get_redis()
+        try:
+            cached_data = redis.get(cache_key)
+            if cached_data:
+                return json.loads(cached_data)
+        except Exception as e:
+            print(f"Redis Cache Get Error: {e}")
         try:
             with get_connection() as con:
                 with con.cursor(dictionary=True) as cursor:
@@ -275,16 +321,24 @@ class KLineModel:
                         i["ma20"] = float(i["ma20"]) if i["ma20"] is not None else 0
                         i["ma60"] = float(i["ma60"]) if i["ma60"] is not None else 0
                     if result:
-                        KLINE_CACHE[cache_key] = result
+                        try:
+                            redis.setex(cache_key, 60*60*24, json.dumps(result))
+                        except Exception as e:
+                            print(f"Redis Cache Set Error: {e}")
                     return result
         except Exception as e:
             print(e)
             return None
     @staticmethod
     def get_TPEX_KLine(offset: int = 0):
-        cache_key = f"index_TPEX_{offset}"
-        if cache_key in KLINE_CACHE:
-            return KLINE_CACHE[cache_key]
+        cache_key = f"index_kline:TPEX:{offset}"
+        redis = get_redis()
+        try:
+            cached_data = redis.get(cache_key)
+            if cached_data:
+                return json.loads(cached_data)
+        except Exception as e:
+            print(f"Redis Cache Get Error: {e}")
         try:
             with get_connection() as con:
                 with con.cursor(dictionary=True) as cursor:
@@ -324,16 +378,24 @@ class KLineModel:
                         i["ma20"] = float(i["ma20"]) if i["ma20"] is not None else 0
                         i["ma60"] = float(i["ma60"]) if i["ma60"] is not None else 0
                     if result:
-                        KLINE_CACHE[cache_key] = result
+                        try:
+                            redis.setex(cache_key, 60*60*24, json.dumps(result))
+                        except Exception as e:
+                            print(f"Redis Cache Set Error: {e}")
                     return result
         except Exception as e:
             print(e)
             return None
     @staticmethod
     def get_TPEX_KLine_week():
-        cache_key = f"index_TPEX_week"
-        if cache_key in KLINE_CACHE:
-            return KLINE_CACHE[cache_key]
+        cache_key = f"index_kline:TPEX:week"
+        redis = get_redis()
+        try:
+            cached_data = redis.get(cache_key)
+            if cached_data:
+                return json.loads(cached_data)
+        except Exception as e:
+            print(f"Redis Cache Get Error: {e}")
         try:
             with get_connection() as con:
                 with con.cursor(dictionary=True) as cursor:
@@ -366,16 +428,24 @@ class KLineModel:
                         i["ma20"] = float(i["ma20"]) if i["ma20"] is not None else 0
                         i["ma60"] = float(i["ma60"]) if i["ma60"] is not None else 0
                     if result:
-                        KLINE_CACHE[cache_key] = result
+                        try:
+                            redis.setex(cache_key, 60*60*24, json.dumps(result))
+                        except Exception as e:
+                            print(f"Redis Cache Set Error: {e}")
                     return result
         except Exception as e:
             print(e)
             return None
     @staticmethod
     def get_TPEX_KLine_month():
-        cache_key = f"index_TPEX_month"
-        if cache_key in KLINE_CACHE:
-            return KLINE_CACHE[cache_key]
+        cache_key = f"index_kline:TPEX:month"
+        redis = get_redis()
+        try:
+            cached_data = redis.get(cache_key)
+            if cached_data:
+                return json.loads(cached_data)
+        except Exception as e:
+            print(f"Redis Cache Get Error: {e}")
         try:
             with get_connection() as con:
                 with con.cursor(dictionary=True) as cursor:
@@ -408,7 +478,10 @@ class KLineModel:
                         i["ma20"] = float(i["ma20"]) if i["ma20"] is not None else 0
                         i["ma60"] = float(i["ma60"]) if i["ma60"] is not None else 0
                     if result:
-                        KLINE_CACHE[cache_key] = result
+                        try:
+                            redis.setex(cache_key, 60*60*24, json.dumps(result))
+                        except Exception as e:
+                            print(f"Redis Cache Set Error: {e}")
                     return result
         except Exception as e:
             print(e)

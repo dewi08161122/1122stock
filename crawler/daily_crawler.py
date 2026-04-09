@@ -4,6 +4,7 @@ from services.tpex_stock_service import TpexStock
 from services.tpex_index_service import TpexIndex
 from models.save_stock_model import StockModel
 from infrastructure.network import get_json_by_url
+from infrastructure.redis import cleanup_after_crawl
 import time, random
 from datetime import timedelta, date
 
@@ -90,6 +91,7 @@ def get_today():
         get_TwseStock_data(start, end)
         get_TpexStock_data(start, end)
         StockModel.all_kline_to_week_month(start.strftime('%Y-%m-%d'))
+        cleanup_after_crawl()
     except Exception as e:
         print(f"執行過程中發生錯誤: {e}")
     finally:

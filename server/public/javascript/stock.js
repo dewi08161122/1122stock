@@ -224,6 +224,8 @@ async function fetchKLineData(isInitial = true) {
     if (isLoading || !hasMoreData) return;
     isLoading = true;
 
+    const timeScale = chart.timeScale();
+    const scrollPosition = timeScale.getVisibleLogicalRange();
     try {
         const response = await fetch(`/api/stock/${stockId}?offset=${currentOffset}&period=${currentPeriod}`);
         const newData = await response.json();
@@ -232,6 +234,9 @@ async function fetchKLineData(isInitial = true) {
             hasMoreData = false;
             return;
         }
+
+        const addedCount = newData.length;
+
         if (currentPeriod !== 'day') {
             allData = newData; 
             hasMoreData = false;
@@ -241,7 +246,16 @@ async function fetchKLineData(isInitial = true) {
         }
 
         renderKLine(allData, isInitial);
-        updateInfoBar(null, allData);
+        if (!isInitial && scrollPosition && addedCount > 0) {
+            requestAnimationFrame(() => {
+                timeScale.scrollToPosition(scrollPosition.from + addedCount, false);
+                
+                timeScale.setVisibleLogicalRange({
+                    from: scrollPosition.from + addedCount,
+                    to: scrollPosition.to + addedCount,
+                });
+            });
+        }
 
     } catch (error) {
         console.error(error);
@@ -310,15 +324,18 @@ volumeSeries.setData(volumeData);
     maSeries.ma60.setData(data.map(d => ({ time: d.time, value: d.ma60 })));
 
     if (isInitial) {
-        const N = 150;
-        if (data.length > N) {
-            chart.timeScale().setVisibleRange({
-                from: data[data.length - N].time,
-                to: data[data.length - 1].time,
-            });
-        } else {
-            chart.timeScale().fitContent();
-        }
+        requestAnimationFrame(() => {
+            const N = 150;
+            const timeScale = chart.timeScale();
+            if (data.length > N) {
+                timeScale.setVisibleRange({
+                    from: data[data.length - N].time,
+                    to: data[data.length - 1].time,
+                });
+            } else {
+                timeScale.fitContent();
+            }
+        });
     }
 }
 // 移動時更新左上資訊
