@@ -22,7 +22,7 @@ def sign(body: dict=Body(...)):
         print(e)
         return{"error":True,"message":"伺服器出現未知問題"}
 
-@router.get("/api/user/auth", summary="確認使用者狀態", tags=["Uesr"])
+@router.get("/api/user/auth", summary="確認使用者狀態", tags=["User"])
 def check(token: str = Cookie(None)):
     if token is None:
         return {"error": True, "message": "未登入系統"}
