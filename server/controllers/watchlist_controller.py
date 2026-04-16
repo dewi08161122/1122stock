@@ -4,7 +4,7 @@ from infrastructure.jwt import JwtModel
 
 router = APIRouter()
 
-@router.post("/api/watchlist")
+@router.post("/api/watchlist", summary="新增個人觀察名單", tags=["Member Function"])
 def increase_stock(body: dict=Body(...),token: str = Cookie(None)):
     if not token:
         return {"error": True, "message": "未登入或憑證已過期"}
@@ -20,7 +20,7 @@ def increase_stock(body: dict=Body(...),token: str = Cookie(None)):
         print(e)
         return{"error":True,"message":"伺服器出現未知問題"}
     
-@router.delete("/api/watchlist/{number}")
+@router.delete("/api/watchlist/{number}", summary="刪除個人觀察名單", tags=["Member Function"])
 def delete_stock(number: str, token: str = Cookie(None)):
     if not token:
         return {"error": True, "message": "未登入或憑證已過期"}
@@ -35,7 +35,7 @@ def delete_stock(number: str, token: str = Cookie(None)):
         print(e)
         return{"error":True,"message":"伺服器出現未知問題"}
 
-@router.get("/api/watchlist")
+@router.get("/api/watchlist", summary="顯示個人觀察名單", tags=["Member Function"])
 def get_watchlist(token: str = Cookie(None)):
     if not token:
         return {"error": True, "message": "未登入或憑證已過期"}

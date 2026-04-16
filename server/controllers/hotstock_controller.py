@@ -4,7 +4,7 @@ from datetime import timedelta, date
 
 router = APIRouter()
 
-@router.get("/api/hotstock/value")
+@router.get("/api/hotstock/value", summary="取得當日成交值熱門標的", tags=["HotStock"])
 def gethotstock():
     try:
         trade_date = date.today()

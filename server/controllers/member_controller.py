@@ -7,7 +7,7 @@ ENV = os.getenv("ENV", "development")
 
 router = APIRouter()
 
-@router.post("/api/user")
+@router.post("/api/user", summary="註冊會員", tags=["User"])
 def sign(body: dict=Body(...)):
     email=body["email"]
     password=body["password"]
@@ -22,7 +22,7 @@ def sign(body: dict=Body(...)):
         print(e)
         return{"error":True,"message":"伺服器出現未知問題"}
 
-@router.get("/api/user/auth")
+@router.get("/api/user/auth", summary="確認使用者狀態", tags=["Uesr"])
 def check(token: str = Cookie(None)):
     if token is None:
         return {"error": True, "message": "未登入系統"}
@@ -35,7 +35,7 @@ def check(token: str = Cookie(None)):
         print(e)
         return{"error":True,"message":"伺服器出現未知問題"}
     
-@router.put("/api/user/auth")
+@router.put("/api/user/auth", summary="會員登入", tags=["User"])
 def login(response: Response, body: dict=Body(...)):
     email=body["email"]
     password=body["password"]

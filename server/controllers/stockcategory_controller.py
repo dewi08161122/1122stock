@@ -3,7 +3,7 @@ from models.search_model import SearchModel
 
 router = APIRouter()
     
-@router.get("/api/stockcategory")
+@router.get("/api/stockcategory", summary="取得股票類股族群", tags=["Stock Category"])
 def getstockcategory():
     try:
         stockcategory = SearchModel.get_category()
@@ -14,7 +14,7 @@ def getstockcategory():
         print(e)
         return{"error":True,"message":"伺服器內部錯誤"}
 
-@router.get("/api/categorystock")
+@router.get("/api/categorystock", summary="根據類股族群取得個股", tags=["Stock Category"])
 def getcategorystock(category_name: str = Query(None)):
     try:
         if category_name is None:
@@ -26,7 +26,7 @@ def getcategorystock(category_name: str = Query(None)):
     except Exception as e:
         print(e)
         return{"error":True,"message":"伺服器內部錯誤"}
-@router.get("/api/searchstock")
+@router.get("/api/searchstock", summary="根據名稱或代號查詢個股", tags=["Search"])
 def searchstock(keyword: str = Query(None)):
     try:
         stock = SearchModel.search_stock(keyword)

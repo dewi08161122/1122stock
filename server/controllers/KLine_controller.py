@@ -3,7 +3,7 @@ from models.KLine_model import KLineModel
 
 router = APIRouter()
     
-@router.get("/api/stock/{number}")
+@router.get("/api/stock/{number}", summary="取得K線資料", tags=["KLine"])
 def getStockKLine(number: str, offset: int = 0, period: str = Query("day", enum=["day", "week", "month"])):
     try:
         if number == "TAIEX":
