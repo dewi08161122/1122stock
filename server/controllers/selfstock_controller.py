@@ -4,7 +4,7 @@ from infrastructure.jwt import JwtModel
 
 router = APIRouter()
 
-@router.post("/api/holdlist")
+@router.post("/api/holdlist", summary="新增個人持股", tags=["Member Function"])
 def increase_hold(body: dict=Body(...),token: str = Cookie(None)):
     if not token:
         return {"error": True, "message": "未登入或憑證已過期"}
@@ -23,7 +23,7 @@ def increase_hold(body: dict=Body(...),token: str = Cookie(None)):
         print(e)
         return{"error":True,"message":"伺服器出現未知問題"}
 
-@router.put("/api/holdlist")
+@router.put("/api/holdlist", summary="修改單一個股持股紀錄", tags=["Member Function"])
 def update_hold(body: dict=Body(...),token: str = Cookie(None)):
     if not token:
         return {"error": True, "message": "未登入或憑證已過期"}
@@ -45,7 +45,7 @@ def update_hold(body: dict=Body(...),token: str = Cookie(None)):
         print(e)
         return{"error":True,"message":"伺服器出現未知問題"}   
      
-@router.delete("/api/holdlist/stock/{number}")
+@router.delete("/api/holdlist/stock/{number}", summary="刪除單一個股所有持股紀錄", tags=["Member Function"])
 def delete_stock_all(number: str, token: str = Cookie(None)):
     if not token:
         return {"error": True, "message": "未登入或憑證已過期"}
@@ -60,7 +60,7 @@ def delete_stock_all(number: str, token: str = Cookie(None)):
         print(e)
         return{"error":True,"message":"伺服器出現未知問題"}
 
-@router.delete("/api/holdlist/single/{id}")
+@router.delete("/api/holdlist/single/{id}", summary="刪除單一個股的一筆紀錄", tags=["Member Function"])
 def delete_single_record(id: int, token: str = Cookie(None)):
     if not token:
         return {"error": True, "message": "未登入或憑證已過期"}
@@ -75,7 +75,7 @@ def delete_single_record(id: int, token: str = Cookie(None)):
         print(e)
         return{"error":True,"message":"伺服器出現未知問題"}
 
-@router.get("/api/holdlist")
+@router.get("/api/holdlist", summary="取得會員持股紀錄", tags=["Member Function"])
 def get_holdlist(token: str = Cookie(None)):
     if not token:
         return {"error": True, "message": "未登入或憑證已過期"}
@@ -90,7 +90,7 @@ def get_holdlist(token: str = Cookie(None)):
         print(e)
         return{"error":True,"message":"伺服器內部錯誤"}
     
-@router.get("/api/holdlist/stock/{number}")
+@router.get("/api/holdlist/stock/{number}", summary="取得單一個股所有持股紀錄", tags=["Member Function"])
 def get_holdlist_stock(number: str, token: str = Cookie(None)):
     if not token:
         return {"error": True, "message": "未登入或憑證已過期"}

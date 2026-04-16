@@ -4,7 +4,7 @@ from infrastructure.connection import get_connection
 
 router = APIRouter()
 
-@router.get("/api/todaymarket")
+@router.get("/api/todaymarket", summary="取得當天股票市場漲跌家數", tags=["Market"])
 def gettodaymarket():
     try:
         with get_connection() as con:
