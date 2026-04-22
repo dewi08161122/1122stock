@@ -26,8 +26,8 @@ def get_TwseStock_data(start_date, end_date):  # 資料進度 2012, 1, 1
         sleep_time = random.uniform(5, 12) 
         time.sleep(sleep_time)
 
-start = date(2026, 3, 23)
-end = date(2026, 3, 23)
+start = date(2026, 4, 20)
+end = date(2026, 4, 20)
 # get_TwseStock_data(start, end) # 上市個股進度
 
 def get_TwseIndex_data(start_date, end_date):  # 資料進度 2010, 1, 1
@@ -49,7 +49,7 @@ def get_TwseIndex_data(start_date, end_date):  # 資料進度 2010, 1, 1
 
 # start = date(2018, 12, 22)
 # end = date(2018, 12, 22)
-get_TwseIndex_data(start, end) # 上市大盤進度
+# get_TwseIndex_data(start, end) # 上市大盤進度
 
 def get_TpexIndex_data(start_date, end_date):  # 資料進度 2010, 1, 1
     while start_date >= end_date:
@@ -94,19 +94,6 @@ def get_TpexStock_data(start_date, end_date):  # 資料進度 2017, 10, 15
 
 # start = date(2026, 3, 19)
 # end = date(2026, 3, 19)
-# get_TpexStock_data(start, end) # 上櫃個股進度+上櫃指數成交金額
+get_TpexStock_data(start, end) # 上櫃個股進度+上櫃指數成交金額
 
-# def get_today():
-#     try:
-#         start = date.today()
-#         end = date.today()
-#         get_TwseIndex_data(start, end)
-#         get_TpexIndex_data(start, end)
-#         get_TwseStock_data(start, end)
-#         get_TpexStock_data(start, end)
-#     except Exception as e:
-#         print(f"執行過程中發生錯誤: {e}")
-#     finally:
-#         print("--- 每日更新程序結束 ---", flush=True)
 
-# get_today()
