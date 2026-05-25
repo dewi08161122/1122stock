@@ -62,7 +62,7 @@
 ### 2. Data Pipeline Workflow
 
 <p align="center">
-<img src="server/public/image/Workflow.png"/>
+<img src="server/public/image/workflow.png"/>
 </p>
 
 * Description: Cron Job → Web Scraper → Data Cleaning → MySQL/Redis Update.
